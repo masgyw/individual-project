@@ -1,2 +1,2 @@
 # individual-project
-The project for learn
+personal project for study
