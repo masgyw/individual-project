@@ -180,10 +180,9 @@ public class CgServiceImplProcessor extends BaseCodeGenProcessor {
                     .addParameter(Long.class, "id")
                     .addModifiers(Modifier.PUBLIC)
                     .addCode(
-                            CodeBlock.of("$T $L =  $T.ofNullable($L.selectById(id));\n",
+                            CodeBlock.of("$T $L =  $L.findById(id);\n",
                                     ParameterizedTypeName.get(ClassName.get(Optional.class),
-                                            ClassName.get(typeElement)), classFieldName, Optional.class,
-                                    repositoryFieldName)
+                                            ClassName.get(typeElement)), classFieldName, repositoryFieldName)
                     ).addCode(
                             CodeBlock.of("return new $T($L.orElseThrow(() -> new $T($T.NotFindError)));",
                                     ClassName.get(nameContext.getVoPackageName(), nameContext.getVoClassName()),
