@@ -4,6 +4,7 @@ import cn.gyw.individual.commons.enums.ValidStatus;
 import cn.gyw.individual.plugin.codegen.annotations.FieldDesc;
 import cn.gyw.individual.plugin.codegen.processor.api.CgCreateRequest;
 import cn.gyw.individual.plugin.codegen.processor.api.CgQueryRequest;
+import cn.gyw.individual.plugin.codegen.processor.api.CgResponse;
 import cn.gyw.individual.plugin.codegen.processor.api.CgUpdateRequest;
 import cn.gyw.individual.plugin.codegen.processor.controller.CgController;
 import cn.gyw.individual.plugin.codegen.processor.creator.CgCreator;
@@ -44,6 +45,7 @@ import java.time.LocalDateTime;
 @CgCreateRequest(pkgName = "cn.gyw.individual.backend.service.request")
 @CgUpdateRequest(pkgName = "cn.gyw.individual.backend.service.request")
 @CgQueryRequest(pkgName = "cn.gyw.individual.backend.service.request")
+@CgResponse(pkgName = "cn.gyw.individual.backend.service.response")
 @Entity
 @Table(name = "house_info")
 @Data
