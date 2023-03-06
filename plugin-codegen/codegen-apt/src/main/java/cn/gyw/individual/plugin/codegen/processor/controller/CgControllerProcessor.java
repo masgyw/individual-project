@@ -1,13 +1,13 @@
 package cn.gyw.individual.plugin.codegen.processor.controller;
 
-import cn.gyw.individual.plugin.codegen.processor.BaseCodeGenProcessor;
-import cn.gyw.individual.plugin.codegen.processor.DefaultNameContext;
-import cn.gyw.individual.plugin.codegen.spi.CodeGenProcessor;
-import cn.gyw.individual.plugin.codegen.util.StringUtils;
 import cn.gyw.individual.commons.enums.CodeEnum;
 import cn.gyw.individual.commons.model.DataResponse;
 import cn.gyw.individual.commons.model.PageData;
 import cn.gyw.individual.commons.model.PageRequestWrapper;
+import cn.gyw.individual.plugin.codegen.processor.BaseCodeGenProcessor;
+import cn.gyw.individual.plugin.codegen.processor.DefaultNameContext;
+import cn.gyw.individual.plugin.codegen.spi.CodeGenProcessor;
+import cn.gyw.individual.plugin.codegen.util.StringUtils;
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.*;
 import lombok.RequiredArgsConstructor;
@@ -184,7 +184,7 @@ public class CgControllerProcessor extends BaseCodeGenProcessor {
     }
 
     private Optional<MethodSpec> findById(String serviceFieldName, DefaultNameContext nameContext) {
-        boolean containsNull = StringUtils.containsNull(nameContext.getVoPackageName(), nameContext.getResponsePackageName(), nameContext.getMapperPackageName());
+        boolean containsNull = StringUtils.containsNull(nameContext.getVoPackageName(), nameContext.getMapperPackageName());
         if (!containsNull) {
             return Optional.of(MethodSpec.methodBuilder("findById")
                     .addParameter(ParameterSpec.builder(Long.class, "id").addAnnotation(PathVariable.class).build())
@@ -216,15 +216,20 @@ public class CgControllerProcessor extends BaseCodeGenProcessor {
      * @return
      */
     private Optional<MethodSpec> findByPage(String serviceFieldName, DefaultNameContext nameContext) {
-        boolean containsNull = StringUtils.containsNull(nameContext.getQueryRequestPackageName(), nameContext.getQueryPackageName(), nameContext.getMapperPackageName(), nameContext.getVoPackageName(), nameContext.getResponsePackageName());
+        boolean containsNull = StringUtils.containsNull(nameContext.getQueryRequestPackageName(),
+                nameContext.getQueryPackageName(), nameContext.getMapperPackageName(), nameContext.getVoPackageName());
         if (!containsNull) {
             return Optional.of(MethodSpec.methodBuilder("findByPage")
-                    .addParameter(ParameterSpec.builder(ParameterizedTypeName.get(ClassName.get(PageRequestWrapper.class), ClassName.get(nameContext.getQueryRequestPackageName(), nameContext.getQueryRequestClassName())), "request").addAnnotation(RequestBody.class).build())
+                    .addParameter(ParameterSpec.builder(ParameterizedTypeName.get(ClassName.get(PageRequestWrapper.class),
+                                    ClassName.get(nameContext.getQueryRequestPackageName(), nameContext.getQueryRequestClassName())), "request")
+                            .addAnnotation(RequestBody.class).build())
                     .addAnnotation(AnnotationSpec.builder(PostMapping.class).addMember("value", "$S", "findByPage").build())
                     .addModifiers(Modifier.PUBLIC)
                     .addCode(
                             CodeBlock.of("$T<$T> wrapper = new $T<>();\n"
-                                    , PageRequestWrapper.class, ClassName.get(nameContext.getQueryPackageName(), nameContext.getQueryClassName()), PageRequestWrapper.class)
+                                    , PageRequestWrapper.class,
+                                    ClassName.get(nameContext.getQueryPackageName(), nameContext.getQueryClassName()),
+                                    PageRequestWrapper.class)
                     )
                     .addCode(
                             CodeBlock.of("wrapper.setBean($T.INSTANCE.request2Query(request.getBean()));\n",

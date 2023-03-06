@@ -1,24 +1,20 @@
 package cn.gyw.individual.plugin.codegen.processor.service;
 
 
+import cn.gyw.individual.commons.enums.CodeEnum;
+import cn.gyw.individual.commons.exceptions.BusinessException;
+import cn.gyw.individual.commons.model.PageRequestWrapper;
 import cn.gyw.individual.plugin.codegen.processor.BaseCodeGenProcessor;
 import cn.gyw.individual.plugin.codegen.processor.DefaultNameContext;
 import cn.gyw.individual.plugin.codegen.spi.CodeGenProcessor;
 import cn.gyw.individual.plugin.codegen.util.StringUtils;
-import cn.gyw.individual.commons.enums.CodeEnum;
-import cn.gyw.individual.commons.exceptions.BusinessException;
-import cn.gyw.individual.commons.model.PageRequestWrapper;
 import cn.gyw.individual.starters.jpa.support.EntityOperations;
 import com.google.auto.service.AutoService;
 import com.google.common.base.CaseFormat;
-import com.querydsl.core.BooleanBuilder;
 import com.squareup.javapoet.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -208,15 +204,14 @@ public class CgServiceImplProcessor extends BaseCodeGenProcessor {
                             "query")
                     .addModifiers(Modifier.PUBLIC)
                     .addCode(
-                            CodeBlock.of("$T booleanBuilder = new $T();\n", BooleanBuilder.class,
-                                    BooleanBuilder.class)
-                    )
-                    .addCode(
-                            CodeBlock.of("$T<$T> page = $L.findAll(booleanBuilder,\n"
-                                            + "        $T.of(query.getPage() - 1, query.getPageSize(), $T.by(\n"
-                                            + "            $T.DESC, \"createdAt\")));\n", org.springframework.data.domain.Page.class, typeElement,
-                                    repositoryFieldName,
+                            CodeBlock.of("$T pageable = $T.of(query.getPage() - 1, query.getPageSize(), $T.by(\n" +
+                                            "            $T.DESC, \"createdAt\"));\n", Pageable.class,
                                     PageRequest.class, Sort.class, Sort.Direction.class)
+                    )
+                    .addCode(CodeBlock.of("$T<$T> example = Example.of();", Example.class, typeElement))
+                    .addCode(
+                            CodeBlock.of("$T<$T> page = $L.findAll(example, pageable);\n", Page.class, typeElement,
+                                    repositoryFieldName)
                     )
                     .addCode(
                             CodeBlock.of(
