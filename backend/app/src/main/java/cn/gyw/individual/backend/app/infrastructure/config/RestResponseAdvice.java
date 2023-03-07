@@ -1,6 +1,5 @@
-package cn.gyw.individual.commons.aop;
+package cn.gyw.individual.backend.app.infrastructure.config;
 
-import cn.gyw.individual.commons.exceptions.GlobalExceptionHandler;
 import cn.gyw.individual.commons.model.DataResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,11 +28,10 @@ public class RestResponseAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {
         Class<?> controllerClass = returnType.getContainingClass();
-        boolean isSupported = controllerClass.isAnnotationPresent(RestController.class)
+        return controllerClass.isAnnotationPresent(RestController.class)
                 || controllerClass.isAnnotationPresent(ResponseBody.class)
                 || returnType.getMethodAnnotation(ResponseBody.class) != null
-                || controllerClass.equals(GlobalExceptionHandler.class);
-        return isSupported;
+                || controllerClass.equals(GlobalExceptionAdvice.class);
     }
 
     @SuppressWarnings("rawtypes")

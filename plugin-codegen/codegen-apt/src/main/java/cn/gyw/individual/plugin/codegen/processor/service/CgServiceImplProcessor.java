@@ -203,23 +203,21 @@ public class CgServiceImplProcessor extends BaseCodeGenProcessor {
                                     ClassName.get(nameContext.getQueryPackageName(), nameContext.getQueryClassName())),
                             "query")
                     .addModifiers(Modifier.PUBLIC)
-                    .addCode(
-                            CodeBlock.of("$T pageable = $T.of(query.getPage() - 1, query.getPageSize(), $T.by(\n" +
-                                            "            $T.DESC, \"createdAt\"));\n", Pageable.class,
-                                    PageRequest.class, Sort.class, Sort.Direction.class)
+                    .addCode(CodeBlock.of("$T pageable = $T.of(query.getPage() - 1, query.getPageSize(), $T.by(\n" +
+                                    "            $T.DESC, \"createdAt\"));\n", Pageable.class,
+                            PageRequest.class, Sort.class, Sort.Direction.class)
                     )
-                    .addCode(CodeBlock.of("$T<$T> example = Example.of();", Example.class, typeElement))
-                    .addCode(
-                            CodeBlock.of("$T<$T> page = $L.findAll(example, pageable);\n", Page.class, typeElement,
-                                    repositoryFieldName)
+                    .addCode(CodeBlock.of("$T<$T> example = Example.of($T.INSTANCE.queryToEntity(query.getBean()));\n",
+                            Example.class, typeElement, ClassName.get(nameContext.getMapperPackageName(), nameContext.getMapperClassName())))
+                    .addCode(CodeBlock.of("$T<$T> page = $L.findAll(example, pageable);\n", Page.class, typeElement,
+                            repositoryFieldName)
                     )
-                    .addCode(
-                            CodeBlock.of(
-                                    "return new $T<>(page.getContent().stream().map(entity -> new $T(entity))\n"
-                                            + "        .collect($T.toList()), page.getPageable(), page.getTotalElements());",
-                                    PageImpl.class,
-                                    ClassName.get(nameContext.getVoPackageName(), nameContext.getVoClassName()),
-                                    Collectors.class)
+                    .addCode(CodeBlock.of(
+                            "return new $T<>(page.getContent().stream().map(entity -> new $T(entity))\n"
+                                    + "        .collect($T.toList()), page.getPageable(), page.getTotalElements());",
+                            PageImpl.class,
+                            ClassName.get(nameContext.getVoPackageName(), nameContext.getVoClassName()),
+                            Collectors.class)
                     )
                     .addJavadoc("findByPage")
                     .addAnnotation(Override.class)

@@ -46,7 +46,7 @@ public class PageData<T> implements Serializable {
         this.totalPage = totalPage;
     }
 
-    public static <T> PageData of(List<T> list, Long total, Integer pageNum, Integer pageSize, Integer totalPage) {
-        return new PageData(list, total, pageNum, pageSize, totalPage);
+    public static <T> PageData<T> of(List<T> list, Long total, Integer pageNum, Integer pageSize, Integer totalPage) {
+        return new PageData<>(list, total, pageNum, pageSize, totalPage);
     }
 }

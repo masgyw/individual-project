@@ -202,7 +202,8 @@ public class CgControllerProcessor extends BaseCodeGenProcessor {
                             CodeBlock.of("return $T.success(vo);", DataResponse.class)
                     )
                     .addJavadoc("findById")
-                    .returns(ParameterizedTypeName.get(ClassName.get(DataResponse.class), ClassName.get(nameContext.getResponsePackageName(), nameContext.getResponseClassName())))
+                    .returns(ParameterizedTypeName.get(ClassName.get(DataResponse.class),
+                            ClassName.get(nameContext.getVoPackageName(), nameContext.getVoClassName())))
                     .build());
         }
         return Optional.empty();
@@ -245,17 +246,16 @@ public class CgControllerProcessor extends BaseCodeGenProcessor {
                     .addCode(
                             CodeBlock.of("return $T.success(\n"
                                     + "        $T.of(\n"
-                                    + "            page.getContent().stream()\n"
-                                    + "                .map(vo -> $T.INSTANCE.vo2CustomResponse(vo))\n"
-                                    + "                .collect($T.toList()),\n"
+                                    + "            page.getContent(),\n"
                                     + "            page.getTotalElements(),\n"
                                     + "            page.getSize(),\n"
-                                    + "            page.getNumber())\n"
-                                    + "    );", DataResponse.class, PageData.class, ClassName.get(nameContext.getMapperPackageName(), nameContext.getMapperClassName()), Collectors.class)
+                                    + "            page.getNumber(),\n"
+                                    + "            page.getTotalPages())\n"
+                                    + "    );", DataResponse.class, PageData.class)
                     )
                     .addJavadoc("findByPage request")
                     .returns(ParameterizedTypeName.get(ClassName.get(DataResponse.class), ParameterizedTypeName.get(ClassName.get(
-                            PageData.class), ClassName.get(nameContext.getResponsePackageName(), nameContext.getResponseClassName()))))
+                            PageData.class), ClassName.get(nameContext.getVoPackageName(), nameContext.getVoClassName()))))
                     .build());
         }
         return Optional.empty();

@@ -40,15 +40,15 @@ public final class DataResponse<E> {
         return obj;
     }
 
-    public static DataResponse fail(BaseEnum codeEnum) {
-        DataResponse object = new DataResponse();
+    public static DataResponse<?> fail(BaseEnum<?> codeEnum) {
+        DataResponse<?> object = new DataResponse<>();
         object.setMsg(codeEnum.getName());
         object.setCode(codeEnum.getCode());
         return object;
     }
 
-    public static DataResponse fail(String msg) {
-        DataResponse object = new DataResponse();
+    public static DataResponse<?> fail(String msg) {
+        DataResponse<?> object = new DataResponse<>();
         object.setMsg(msg);
         object.setCode(CodeEnum.Fail.getCode());
         return object;
@@ -62,7 +62,7 @@ public final class DataResponse<E> {
         return object;
     }
 
-    public static <E> DataResponse<E> res(BaseEnum codeEnum, E e) {
+    public static <E> DataResponse<E> res(BaseEnum<?> codeEnum, E e) {
         DataResponse<E> object = new DataResponse<>();
         object.setMsg(codeEnum.getName());
         object.setCode(codeEnum.getCode());
