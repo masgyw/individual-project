@@ -52,6 +52,7 @@ import java.time.LocalDateTime;
 public class House extends BaseJpaAggregate {
 
     // 爬取日期
+    @QueryItem
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate crawlDate;
     // 省份
@@ -94,6 +95,7 @@ public class House extends BaseJpaAggregate {
     // 数据来源 1->房天下；2->58同城
     private Integer originType;
     // 源数据文件名
+    @QueryItem
     private String sourceFile;
     @FieldDesc(name = "创建时间")
     private LocalDateTime createdTime;

@@ -1,0 +1,4 @@
+house:
+  dir:
+    storage: /
+    backup: /

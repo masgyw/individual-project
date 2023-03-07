@@ -2,11 +2,14 @@
 package cn.gyw.individual.backend.service.service;
 
 import cn.gyw.individual.backend.service.creator.HouseCreator;
+import cn.gyw.individual.backend.service.dto.HouseInfoDto;
 import cn.gyw.individual.backend.service.query.HouseQuery;
 import cn.gyw.individual.backend.service.updater.HouseUpdater;
 import cn.gyw.individual.backend.service.vo.HouseVO;
 import cn.gyw.individual.commons.model.PageRequestWrapper;
 import java.lang.Long;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 public interface IHouseService {
@@ -39,4 +42,6 @@ public interface IHouseService {
    * findByPage
    */
   Page<HouseVO> findByPage(PageRequestWrapper<HouseQuery> query);
+
+  boolean batchInsert(List<HouseInfoDto> dataList);
 }

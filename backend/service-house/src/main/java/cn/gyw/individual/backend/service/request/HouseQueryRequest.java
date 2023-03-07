@@ -5,9 +5,15 @@ import cn.gyw.individual.commons.model.Request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.lang.String;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Schema
 public class HouseQueryRequest implements Request {
+  @Schema(
+      title = "crawlDate"
+  )
+  private LocalDate crawlDate;
+
   @Schema(
       title = "province"
   )
@@ -27,6 +33,19 @@ public class HouseQueryRequest implements Request {
       title = "price"
   )
   private BigDecimal price;
+
+  @Schema(
+      title = "sourceFile"
+  )
+  private String sourceFile;
+
+  public LocalDate getCrawlDate() {
+    return crawlDate;
+  }
+
+  public void setCrawlDate(LocalDate crawlDate) {
+    this.crawlDate = crawlDate;
+  }
 
   public String getProvince() {
     return province;
@@ -58,5 +77,13 @@ public class HouseQueryRequest implements Request {
 
   public void setPrice(BigDecimal price) {
     this.price = price;
+  }
+
+  public String getSourceFile() {
+    return sourceFile;
+  }
+
+  public void setSourceFile(String sourceFile) {
+    this.sourceFile = sourceFile;
   }
 }
