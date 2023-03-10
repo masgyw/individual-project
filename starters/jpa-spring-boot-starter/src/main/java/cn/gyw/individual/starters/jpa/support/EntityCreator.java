@@ -3,20 +3,21 @@ package cn.gyw.individual.starters.jpa.support;
 import cn.gyw.individual.commons.validator.CreateGroup;
 import com.google.common.base.Preconditions;
 import io.vavr.control.Try;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.CrudRepository;
-
 @Slf4j
-public class EntityCreator<T, ID> extends BaseEntityOperation implements Create<T>, UpdateHandler<T>, Executor<T> {
+public class EntityCreator<T, ID> extends BaseEntityOperation
+        implements Create<T>, UpdateHandler<T>, Executor<T>, BatchExecutor<T> {
 
     private final CrudRepository<T, ID> repository;
     private T t;
+    private Iterable<T> list;
     private Consumer<T> successHook = t -> log.info("save success");
     private Consumer<? super Throwable> errorHook = e -> e.printStackTrace();
 
@@ -37,10 +38,23 @@ public class EntityCreator<T, ID> extends BaseEntityOperation implements Create<
     }
 
     @Override
+    public UpdateHandler<T> batchCreate(Supplier<Iterable<T>> supplier) {
+        this.list = supplier.get();
+        return this;
+    }
+
+    @Override
     public Executor<T> update(Consumer<T> consumer) {
         Preconditions.checkArgument(Objects.nonNull(t), "entity must supply");
         consumer.accept(this.t);
         return this;
+    }
+
+    @Override
+    public BatchExecutor<Iterable<T>> batchUpdate(Consumer<Iterable<T>> consumer) {
+        Preconditions.checkArgument(Objects.nonNull(list), "entity list must supply");
+        consumer.accept(this.list);
+        return null;
     }
 
     @Override
@@ -58,5 +72,24 @@ public class EntityCreator<T, ID> extends BaseEntityOperation implements Create<
         return this;
     }
 
+    @Override
+    public Optional<Iterable<T>> batchExecute() {
+        for (T data : this.list) {
+            doValidate(data, CreateGroup.class);
+        }
+        Try.of(() -> repository.saveAll(list))
+                .onSuccess(su)
+        return Optional.empty();
+    }
+
+    @Override
+    public Executor<Iterable<T>> batchSuccessHook(Consumer<Iterable<T>> consumer) {
+        return null;
+    }
+
+    @Override
+    public Executor<Iterable<T>> batchErrorHook(Consumer<? super Throwable> consumer) {
+        return null;
+    }
 }
 

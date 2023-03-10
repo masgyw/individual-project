@@ -6,4 +6,6 @@ public interface Create<T> {
 
     UpdateHandler<T> create(Supplier<T> supplier);
 
+    UpdateHandler<T> batchCreate(Supplier<Iterable<T>> supplier);
+
 }

@@ -1,5 +1,6 @@
 package cn.gyw.individual.backend.service.shedule;
 
+import cn.gyw.individual.backend.service.creator.HouseCreator;
 import cn.gyw.individual.backend.service.dto.HouseInfoDto;
 import cn.gyw.individual.backend.service.query.HouseQuery;
 import cn.gyw.individual.backend.service.service.IHouseService;
@@ -127,7 +128,7 @@ public class HouseInfoCsvReader {
         }
     }
 
-    private boolean saveDB(List<HouseInfoDto> dataList) {
+    private boolean saveDB(List<HouseCreator> dataList) {
         return houseInfoService.batchInsert(dataList);
     }
 

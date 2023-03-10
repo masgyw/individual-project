@@ -6,4 +6,6 @@ public interface UpdateHandler<T> {
 
     Executor<T> update(Consumer<T> consumer);
 
+    BatchExecutor<Iterable<T>> batchUpdate(Consumer<Iterable<T>> consumer);
+
 }
