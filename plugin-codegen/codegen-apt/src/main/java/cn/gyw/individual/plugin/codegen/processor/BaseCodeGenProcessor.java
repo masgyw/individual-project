@@ -283,7 +283,7 @@ public abstract class BaseCodeGenProcessor implements CodeGenProcessor {
     }
 
 
-    public void genJavaSourceFile(String packageName, String pathStr,
+    public void genJavaSourceFile(String packageName, String pathStr, boolean overrideSource,
                                   TypeSpec.Builder typeSpecBuilder) {
         TypeSpec typeSpec = typeSpecBuilder.build();
         JavaFile javaFile = JavaFile
@@ -301,10 +301,13 @@ public abstract class BaseCodeGenProcessor implements CodeGenProcessor {
             }
             String sourceFileName = path.toFile().getAbsolutePath() + File.separator + packagePath;
             File sourceFile = new File(sourceFileName);
-            Files.deleteIfExists(Paths.get(sourceFileName));
-            if (!sourceFile.exists()) {
-                javaFile.writeTo(file);
+            if (sourceFile.exists() && !overrideSource) {
+                System.out.println("源码文件存在不生成：" + file.getAbsolutePath());
+                return;
             }
+            // 不存在 或 覆盖，先删除源文件后创建
+            Files.deleteIfExists(Paths.get(sourceFileName));
+            javaFile.writeTo(file);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

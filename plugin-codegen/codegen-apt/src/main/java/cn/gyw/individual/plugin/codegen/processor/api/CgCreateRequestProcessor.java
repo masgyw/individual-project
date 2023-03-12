@@ -20,29 +20,31 @@ import java.util.Set;
 @AutoService(value = CodeGenProcessor.class)
 public class CgCreateRequestProcessor extends BaseCodeGenProcessor {
 
-  public static final String CREATE_REQUEST_SUFFIX = "CreateRequest";
+    public static final String CREATE_REQUEST_SUFFIX = "CreateRequest";
 
-  @Override
-  protected void generateClass(TypeElement typeElement, RoundEnvironment roundEnvironment) {
-    DefaultNameContext nameContext = getNameContext(typeElement);
-    Set<VariableElement> fields = findFields(typeElement,
-        p -> Objects.isNull(p.getAnnotation(IgnoreCreator.class)));
-    TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(nameContext.getCreateClassName())
-        .addModifiers(Modifier.PUBLIC)
-        .addSuperinterface(Request.class)
-        .addAnnotation(Schema.class);
-    addSetterAndGetterMethodWithConverter(typeSpecBuilder, fields);
-    genJavaSourceFile(generatePackage(typeElement),
-        typeElement.getAnnotation(CgCreateRequest.class).sourcePath(), typeSpecBuilder);
-  }
+    @Override
+    protected void generateClass(TypeElement typeElement, RoundEnvironment roundEnvironment) {
+        DefaultNameContext nameContext = getNameContext(typeElement);
+        Set<VariableElement> fields = findFields(typeElement,
+                p -> Objects.isNull(p.getAnnotation(IgnoreCreator.class)));
+        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(nameContext.getCreateClassName())
+                .addModifiers(Modifier.PUBLIC)
+                .addSuperinterface(Request.class)
+                .addAnnotation(Schema.class);
+        addSetterAndGetterMethodWithConverter(typeSpecBuilder, fields);
 
-  @Override
-  public Class<? extends Annotation> getAnnotation() {
-    return CgCreateRequest.class;
-  }
+        CgCreateRequest cgCreateRequest = typeElement.getAnnotation(CgCreateRequest.class);
+        genJavaSourceFile(generatePackage(typeElement),
+                cgCreateRequest.sourcePath(), cgCreateRequest.overrideSource(), typeSpecBuilder);
+    }
 
-  @Override
-  public String generatePackage(TypeElement typeElement) {
-    return typeElement.getAnnotation(CgCreateRequest.class).pkgName();
-  }
+    @Override
+    public Class<? extends Annotation> getAnnotation() {
+        return CgCreateRequest.class;
+    }
+
+    @Override
+    public String generatePackage(TypeElement typeElement) {
+        return typeElement.getAnnotation(CgCreateRequest.class).pkgName();
+    }
 }

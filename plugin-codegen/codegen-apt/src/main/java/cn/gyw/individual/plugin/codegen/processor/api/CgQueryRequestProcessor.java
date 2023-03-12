@@ -20,28 +20,31 @@ import java.util.Set;
 @AutoService(value = CodeGenProcessor.class)
 public class CgQueryRequestProcessor extends BaseCodeGenProcessor {
 
-  public static String QUERY_REQUEST_SUFFIX = "QueryRequest";
-  @Override
-  protected void generateClass(TypeElement typeElement, RoundEnvironment roundEnvironment) {
-    DefaultNameContext nameContext = getNameContext(typeElement);
-    Set<VariableElement> fields = findFields(typeElement,
-        p -> Objects.nonNull(p.getAnnotation(QueryItem.class)));
-    TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(nameContext.getQueryRequestClassName())
-        .addModifiers(Modifier.PUBLIC)
-        .addSuperinterface(Request.class)
-        .addAnnotation(Schema.class);
-    addSetterAndGetterMethodWithConverter(typeSpecBuilder, fields);
-    genJavaSourceFile(generatePackage(typeElement),
-        typeElement.getAnnotation(CgQueryRequest.class).sourcePath(), typeSpecBuilder);
-  }
+    public static String QUERY_REQUEST_SUFFIX = "QueryRequest";
 
-  @Override
-  public Class<? extends Annotation> getAnnotation() {
-    return CgQueryRequest.class;
-  }
+    @Override
+    protected void generateClass(TypeElement typeElement, RoundEnvironment roundEnvironment) {
+        DefaultNameContext nameContext = getNameContext(typeElement);
+        Set<VariableElement> fields = findFields(typeElement,
+                p -> Objects.nonNull(p.getAnnotation(QueryItem.class)));
+        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(nameContext.getQueryRequestClassName())
+                .addModifiers(Modifier.PUBLIC)
+                .addSuperinterface(Request.class)
+                .addAnnotation(Schema.class);
+        addSetterAndGetterMethodWithConverter(typeSpecBuilder, fields);
 
-  @Override
-  public String generatePackage(TypeElement typeElement) {
-    return typeElement.getAnnotation(CgQueryRequest.class).pkgName();
-  }
+        CgQueryRequest cgQueryRequest = typeElement.getAnnotation(CgQueryRequest.class);
+        genJavaSourceFile(generatePackage(typeElement),
+                cgQueryRequest.sourcePath(), cgQueryRequest.overrideSource(), typeSpecBuilder);
+    }
+
+    @Override
+    public Class<? extends Annotation> getAnnotation() {
+        return CgQueryRequest.class;
+    }
+
+    @Override
+    public String generatePackage(TypeElement typeElement) {
+        return typeElement.getAnnotation(CgQueryRequest.class).pkgName();
+    }
 }

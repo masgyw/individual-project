@@ -32,8 +32,10 @@ public class CgResponseProcessor extends BaseCodeGenProcessor {
                 .superclass(AbstractResponse.class)
                 .addAnnotation(Schema.class);
         addSetterAndGetterMethodWithConverter(typeSpecBuilder, fields);
+
+        CgResponse cgResponse = typeElement.getAnnotation(CgResponse.class);
         genJavaSourceFile(generatePackage(typeElement),
-                typeElement.getAnnotation(CgResponse.class).sourcePath(), typeSpecBuilder);
+                cgResponse.sourcePath(), cgResponse.overrideSource(), typeSpecBuilder);
     }
 
     @Override

@@ -43,5 +43,7 @@ public interface IHouseService {
      */
     Page<HouseVO> findByPage(PageRequestWrapper<HouseQuery> query);
 
+    List<HouseVO> findByRange(HouseQuery query);
+
     boolean batchInsert(List<HouseCreator> dataList);
 }

@@ -14,11 +14,20 @@ import cn.gyw.individual.commons.model.PageRequestWrapper;
 import cn.gyw.individual.starters.jpa.support.EntityOperations;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -97,10 +106,27 @@ public class HouseServiceImpl implements IHouseService {
     }
 
     @Override
+    public List<HouseVO> findByRange(HouseQuery query) {
+        Specification<House> spec = (root, criteriaQuery, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (Objects.nonNull(query.getStartCrawlDate())) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("crawlDate").as(LocalDate.class), query.getStartCrawlDate()));
+            }
+            if (Objects.nonNull(query.getEndCrawlDate())) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("crawlDate").as(LocalDate.class), query.getEndCrawlDate()));
+            }
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+        List<House> dataList = houseRepository.findAll(spec);
+        return dataList.stream().map(entity -> new HouseVO(entity))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public boolean batchInsert(List<HouseCreator> dataList) {
-        EntityOperations.doCreate(houseRepository)
-                .create(() -> dataList.stream().map(HouseMapper.INSTANCE::dtoToEntity).collect(Collectors.toList()))
-        houseRepository.saveAll()
-        return false;
+        Optional<Iterable<Iterable<House>>> optional = EntityOperations.doCreate(houseRepository)
+                .batchCreate(() -> dataList.stream().map(HouseMapper.INSTANCE::dtoToEntity).collect(Collectors.toList()))
+                .batchUpdate((list) -> list.forEach(House::init)).batchExecute();
+        return optional.isPresent();
     }
 }

@@ -16,29 +16,33 @@ import java.util.Objects;
 @AutoService(value = CodeGenProcessor.class)
 public class CgQueryProcessor extends BaseCodeGenProcessor {
 
-  public static String QUERY_SUFFIX = "Query";
-  @Override
-  protected void generateClass(TypeElement typeElement, RoundEnvironment roundEnvironment) {
-    String className = PREFIX + typeElement.getSimpleName() + QUERY_SUFFIX;
-    String sourceClassName = typeElement.getSimpleName() + QUERY_SUFFIX;
-    TypeSpec.Builder builder = TypeSpec.classBuilder(className)
-        .addModifiers(Modifier.PUBLIC)
-        .addAnnotation(Schema.class)
-        .addAnnotation(Data.class);
-    addSetterAndGetterMethod(builder, findFields(typeElement, ve -> Objects.nonNull(ve.getAnnotation(
-        QueryItem.class))));
-    String packageName = generatePackage(typeElement);
-    genJavaFile(packageName, builder);
-    genJavaFile(packageName, getSourceType(sourceClassName, packageName, className));
-  }
+    public static String QUERY_SUFFIX = "Query";
 
-  @Override
-  public Class<? extends Annotation> getAnnotation() {
-    return CgQuery.class;
-  }
+    @Override
+    protected void generateClass(TypeElement typeElement, RoundEnvironment roundEnvironment) {
+        String className = PREFIX + typeElement.getSimpleName() + QUERY_SUFFIX;
+        String sourceClassName = typeElement.getSimpleName() + QUERY_SUFFIX;
+        TypeSpec.Builder builder = TypeSpec.classBuilder(className)
+                .addModifiers(Modifier.PUBLIC)
+                .addAnnotation(Schema.class)
+                .addAnnotation(Data.class);
+        addSetterAndGetterMethod(builder, findFields(typeElement, ve -> Objects.nonNull(ve.getAnnotation(
+                QueryItem.class))));
+        String packageName = generatePackage(typeElement);
 
-  @Override
-  public String generatePackage(TypeElement typeElement) {
-    return typeElement.getAnnotation(CgQuery.class).pkgName();
-  }
+        // 生成Base基类
+        genJavaFile(packageName, builder);
+        CgQuery cgQuery = typeElement.getAnnotation(CgQuery.class);
+        genJavaSourceFile(packageName, cgQuery.sourcePath(), cgQuery.overrideSource(), getSourceType(sourceClassName, packageName, className));
+    }
+
+    @Override
+    public Class<? extends Annotation> getAnnotation() {
+        return CgQuery.class;
+    }
+
+    @Override
+    public String generatePackage(TypeElement typeElement) {
+        return typeElement.getAnnotation(CgQuery.class).pkgName();
+    }
 }

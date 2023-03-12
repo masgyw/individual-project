@@ -38,8 +38,10 @@ public class CgUpdateRequestProcessor extends BaseCodeGenProcessor {
         typeSpecBuilder.addField(
                 FieldSpec.builder(ClassName.get(Long.class), "id", Modifier.PRIVATE).build());
         addIdSetterAndGetter(typeSpecBuilder);
+
+        CgUpdateRequest cgUpdateRequest = typeElement.getAnnotation(CgUpdateRequest.class);
         genJavaSourceFile(generatePackage(typeElement),
-                typeElement.getAnnotation(CgUpdateRequest.class).sourcePath(), typeSpecBuilder);
+                cgUpdateRequest.sourcePath(), cgUpdateRequest.overrideSource(), typeSpecBuilder);
     }
 
     @Override

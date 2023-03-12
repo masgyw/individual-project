@@ -61,8 +61,10 @@ public class CgMapperProcessor extends BaseCodeGenProcessor {
         vo2ResponseMethod.ifPresent(m -> typeSpecBuilder.addMethod(m));
         Optional<MethodSpec> vo2CustomResponseMethod = vo2CustomResponseMethod(nameContext);
         vo2CustomResponseMethod.ifPresent(m -> typeSpecBuilder.addMethod(m));
+
+        CgMapper cgMapper = typeElement.getAnnotation(CgMapper.class);
         genJavaSourceFile(generatePackage(typeElement),
-                typeElement.getAnnotation(CgMapper.class).sourcePath(), typeSpecBuilder);
+                cgMapper.sourcePath(), cgMapper.overrideSource(), typeSpecBuilder);
     }
 
 

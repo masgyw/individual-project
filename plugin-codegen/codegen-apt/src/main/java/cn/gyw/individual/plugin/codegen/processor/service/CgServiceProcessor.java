@@ -45,8 +45,9 @@ public class CgServiceProcessor extends BaseCodeGenProcessor {
         findByIdMethod.ifPresent(m -> typeSpecBuilder.addMethod(m));
         Optional<MethodSpec> findByPageMethod = findByPageMethod(nameContext);
         findByPageMethod.ifPresent(m -> typeSpecBuilder.addMethod(m));
-        genJavaSourceFile(generatePackage(typeElement),
-                typeElement.getAnnotation(CgService.class).sourcePath(), typeSpecBuilder);
+
+        CgService cgService = typeElement.getAnnotation(CgService.class);
+        genJavaSourceFile(generatePackage(typeElement), cgService.sourcePath(), cgService.overrideSource(), typeSpecBuilder);
     }
 
     @Override

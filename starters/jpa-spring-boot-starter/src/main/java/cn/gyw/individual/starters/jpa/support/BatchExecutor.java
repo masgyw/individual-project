@@ -9,9 +9,4 @@ import java.util.function.Consumer;
 public interface BatchExecutor<T> {
 
     Optional<Iterable<T>> batchExecute();
-
-    Executor<Iterable<T>> batchSuccessHook(Consumer<Iterable<T>> consumer);
-
-    Executor<Iterable<T>> batchErrorHook(Consumer<? super Throwable> consumer);
-
 }

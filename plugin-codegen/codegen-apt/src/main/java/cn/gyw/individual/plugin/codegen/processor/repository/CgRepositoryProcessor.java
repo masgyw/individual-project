@@ -25,7 +25,9 @@ public class CgRepositoryProcessor extends BaseCodeGenProcessor {
         TypeSpec.Builder typeSpecBuilder = TypeSpec.interfaceBuilder(className)
                 .addSuperinterface(ParameterizedTypeName.get(ClassName.get(BaseRepository.class), ClassName.get(typeElement), ClassName.get(Long.class)))
                 .addModifiers(Modifier.PUBLIC);
-        genJavaSourceFile(generatePackage(typeElement), typeElement.getAnnotation(CgRepository.class).sourcePath(), typeSpecBuilder);
+
+        CgRepository cgRepository = typeElement.getAnnotation(CgRepository.class);
+        genJavaSourceFile(generatePackage(typeElement), cgRepository.sourcePath(), cgRepository.overrideSource(), typeSpecBuilder);
     }
 
     @Override

@@ -60,8 +60,10 @@ public class CgControllerProcessor extends BaseCodeGenProcessor {
         findById.ifPresent(m -> typeSpecBuilder.addMethod(m));
         Optional<MethodSpec> findByPage = findByPage(serviceFieldName, nameContext);
         findByPage.ifPresent(m -> typeSpecBuilder.addMethod(m));
+
+        CgController cgController = typeElement.getAnnotation(CgController.class);
         genJavaSourceFile(generatePackage(typeElement),
-                typeElement.getAnnotation(CgController.class).sourcePath(), typeSpecBuilder);
+                cgController.sourcePath(), cgController.overrideSource(), typeSpecBuilder);
     }
 
     @Override

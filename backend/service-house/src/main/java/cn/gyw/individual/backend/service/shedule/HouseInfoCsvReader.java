@@ -1,7 +1,6 @@
 package cn.gyw.individual.backend.service.shedule;
 
 import cn.gyw.individual.backend.service.creator.HouseCreator;
-import cn.gyw.individual.backend.service.dto.HouseInfoDto;
 import cn.gyw.individual.backend.service.query.HouseQuery;
 import cn.gyw.individual.backend.service.service.IHouseService;
 import cn.gyw.individual.backend.service.vo.HouseVO;
@@ -12,20 +11,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.time.LocalDate;
@@ -93,7 +88,7 @@ public class HouseInfoCsvReader {
         boolean isSuccess = false;
         for (File file : fileList) {
             // 2. 读取前一天的数据(不读当天的)
-            List<HouseInfoDto> dataList = readCsvData(file);
+            List<HouseCreator> dataList = readCsvData(file);
             if (CollectionUtils.isEmpty(dataList)) {
                 log.error("文件数据不存在或读取失败！");
                 return false;
@@ -104,7 +99,7 @@ public class HouseInfoCsvReader {
             // 4. 文件处理成功后，移动文件到已处理目录
             if (isSuccess) {
                 // 5. 备份源数据文件
-                backupDataSourceFile(file.toPath());
+                // backupDataSourceFile(file.toPath());
             }
         }
         return isSuccess;
@@ -132,7 +127,7 @@ public class HouseInfoCsvReader {
         return houseInfoService.batchInsert(dataList);
     }
 
-    private List<HouseInfoDto> readCsvData(File file) {
+    private List<HouseCreator> readCsvData(File file) {
         CSVReader csvReader = null;
         try {
             csvReader = new CSVReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
@@ -142,10 +137,10 @@ public class HouseInfoCsvReader {
                 log.error("Csv file headers is null, check data content!");
                 return Collections.emptyList();
             }
-            List<HouseInfoDto> houseInfoDtoList = new ArrayList<>();
+            List<HouseCreator> houseInfoDtoList = new ArrayList<>();
             String[] data;
             while ((data = csvReader.readNext()) != null) {
-                houseInfoDtoList.add(buildHouseInfoDto(enHeaders, data, file.getName()));
+                houseInfoDtoList.add(buildHouseCreator(enHeaders, data, file.getName()));
             }
             return houseInfoDtoList;
         } catch (Exception e) {
@@ -162,21 +157,21 @@ public class HouseInfoCsvReader {
         return Collections.emptyList();
     }
 
-    private HouseInfoDto buildHouseInfoDto(String[] enHeaders, String[] data, String source) {
-        HouseInfoDto houseInfoDto = new HouseInfoDto();
+    private HouseCreator buildHouseCreator(String[] enHeaders, String[] data, String source) {
+        HouseCreator houseCreator = new HouseCreator();
         // 文件名
-        houseInfoDto.setSourceFile(source);
+        houseCreator.setSourceFile(source);
         // 文件数据
         for (int i = 0, len = enHeaders.length; i < len; i++) {
             String prop = enHeaders[i];
             try {
-                PropertyDescriptor pd = PropertyUtils.getPropertyDescriptor(houseInfoDto, prop);
-                pd.getWriteMethod().invoke(houseInfoDto, data[i]);
+                PropertyDescriptor pd = PropertyUtils.getPropertyDescriptor(houseCreator, prop);
+                pd.getWriteMethod().invoke(houseCreator, data[i]);
             } catch (Exception e) {
                 log.error("write filed error [" + prop + "] , error :", e);
             }
         }
-        return houseInfoDto;
+        return houseCreator;
     }
 
     private List<File> findCsvFile(final String fileName, String crawlDate) {

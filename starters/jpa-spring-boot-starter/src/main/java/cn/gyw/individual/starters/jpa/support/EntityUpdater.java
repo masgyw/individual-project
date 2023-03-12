@@ -57,6 +57,11 @@ public class EntityUpdater<T, ID> extends BaseEntityOperation implements Loader<
     }
 
     @Override
+    public BatchExecutor<Iterable<T>> batchUpdate(Consumer<Iterable<T>> consumer) {
+        return null;
+    }
+
+    @Override
     public Executor<T> successHook(Consumer<T> consumer) {
         this.successHook = consumer;
         return this;

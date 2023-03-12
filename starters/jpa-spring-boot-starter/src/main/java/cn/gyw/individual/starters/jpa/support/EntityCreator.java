@@ -26,12 +26,6 @@ public class EntityCreator<T, ID> extends BaseEntityOperation
     }
 
     @Override
-    public Executor<T> errorHook(Consumer<? super Throwable> consumer) {
-        this.errorHook = consumer;
-        return this;
-    }
-
-    @Override
     public UpdateHandler<T> create(Supplier<T> supplier) {
         this.t = supplier.get();
         return this;
@@ -54,7 +48,7 @@ public class EntityCreator<T, ID> extends BaseEntityOperation
     public BatchExecutor<Iterable<T>> batchUpdate(Consumer<Iterable<T>> consumer) {
         Preconditions.checkArgument(Objects.nonNull(list), "entity list must supply");
         consumer.accept(this.list);
-        return null;
+        return (BatchExecutor<Iterable<T>>) this;
     }
 
     @Override
@@ -73,23 +67,21 @@ public class EntityCreator<T, ID> extends BaseEntityOperation
     }
 
     @Override
+    public Executor<T> errorHook(Consumer<? super Throwable> consumer) {
+        this.errorHook = consumer;
+        return this;
+    }
+
+    @Override
     public Optional<Iterable<T>> batchExecute() {
         for (T data : this.list) {
             doValidate(data, CreateGroup.class);
         }
-        Try.of(() -> repository.saveAll(list))
-                .onSuccess(su)
-        return Optional.empty();
-    }
-
-    @Override
-    public Executor<Iterable<T>> batchSuccessHook(Consumer<Iterable<T>> consumer) {
-        return null;
-    }
-
-    @Override
-    public Executor<Iterable<T>> batchErrorHook(Consumer<? super Throwable> consumer) {
-        return null;
+        Iterable<T> dataList = Try.of(() -> repository.saveAll(list))
+                .onSuccess(t -> log.info("batch save success"))
+                .onFailure(ex -> log.error("异常：", ex))
+                .getOrNull();
+        return Optional.ofNullable(dataList);
     }
 }
 
