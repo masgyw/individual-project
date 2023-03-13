@@ -1,8 +1,5 @@
 spring:
   datasource:
-    hikari:
-      maximum-pool-size: 50
-      max-lifetime: 600000
     tomcat:
       test-on-borrow: true
       validation-query: SELECT  1

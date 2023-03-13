@@ -1,6 +1,10 @@
 package cn.gyw.individual.backend.service.config;
 
+import cn.gyw.platform.configuration.interfaces.IConfiguration;
+import cn.gyw.platform.configuration.service.ConfigurationOnFileYaml;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -26,12 +30,32 @@ import javax.sql.DataSource;
         transactionManagerRef = "houseTransactionManager", basePackages = "cn.gyw.individual.backend.service.repository")
 public class HouseDSConfig {
 
+    @Value("${house.datasource.username}")
+    private String username;
+
+    @Value("${house.datasource.url}")
+    private String jdbcUrl;
+
+    @Value("${house.datasource.driver-class-name}")
+    private String driverClass;
+
+    private IConfiguration config = new ConfigurationOnFileYaml();
+
     @Bean(name = "houseDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.house")
     public DataSource houseDataSource() {
+        String host = config.getValue("hw-cloud.datasource", "host");
+        String pwd = config.getValue("hw-cloud.datasource", "password");
         // 自动选择
-        DataSource ds = DataSourceBuilder.create().build();
+        HikariDataSource ds = (HikariDataSource) DataSourceBuilder.create()
+                .driverClassName(driverClass)
+                .url(String.format(jdbcUrl, host))
+                .username(username)
+                .password(pwd)
+                .build();
 
+        ds.setMaximumPoolSize(50);
+        // ds.setMaxLifetime(600000);
         return ds;
     }
 

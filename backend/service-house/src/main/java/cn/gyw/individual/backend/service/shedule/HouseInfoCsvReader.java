@@ -15,19 +15,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ReflectionUtils;
 
 import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -45,6 +47,8 @@ public class HouseInfoCsvReader {
     private String csvStorageDir;
     @Value("${house.dir.backup}")
     private String csvBackupDir;
+
+    private final Map<String, Field> creatorFieldMap = new ConcurrentHashMap<>();
 
     private IHouseService houseInfoService;
 
@@ -165,8 +169,20 @@ public class HouseInfoCsvReader {
         for (int i = 0, len = enHeaders.length; i < len; i++) {
             String prop = enHeaders[i];
             try {
-                PropertyDescriptor pd = PropertyUtils.getPropertyDescriptor(houseCreator, prop);
-                pd.getWriteMethod().invoke(houseCreator, data[i]);
+                Field f = creatorFieldMap.computeIfAbsent(prop, (k) -> {
+                    Field field = ReflectionUtils.findField(HouseCreator.class, prop);
+                    Objects.requireNonNull(field).setAccessible(true);
+                    return field;
+                });
+                if (f.getName().equals("crawlDate")) {
+                    f.set(houseCreator, DateUtil.parse(data[i], DateUtil.YYYYMMDD));
+                    continue;
+                }
+                if (f.getType() == BigDecimal.class) {
+                    f.set(houseCreator, new BigDecimal(data[i]));
+                }
+
+                f.set(houseCreator, data[i]);
             } catch (Exception e) {
                 log.error("write filed error [" + prop + "] , error :", e);
             }

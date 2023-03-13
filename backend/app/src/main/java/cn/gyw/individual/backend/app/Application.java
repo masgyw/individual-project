@@ -3,6 +3,7 @@ package cn.gyw.individual.backend.app;
 import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.core.SpringVersion;
 
 /**
@@ -10,6 +11,7 @@ import org.springframework.core.SpringVersion;
  *
  * @date 2023/2/23
  */
+@ConfigurationPropertiesScan(basePackages = "cn.gyw.individual.backend")
 @SpringBootApplication(scanBasePackages = {"cn.gyw.individual.backend"})
 public class Application {
 
