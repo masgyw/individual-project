@@ -1,5 +1,7 @@
 package cn.gyw.individual.backend.service.service;
 
+import java.io.File;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -9,7 +11,9 @@ import java.util.Set;
  */
 public interface DataFileService {
 
-    Set<String> getFileList(String startDate, String endDate);
+    Set<String> getFileNameList(String startDate, String endDate);
+
+    List<File> findFile(final String fileName, String crawlDate);
 
     boolean importFile(String fileName);
 }

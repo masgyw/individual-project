@@ -36,7 +36,7 @@ public class DataFileController {
     public List<DataFileResponse> queryDataFile(String startDate, String endDate) {
         log.info("查询数据文件列表，日期：{}-{}", startDate, endDate);
         // 文件列表
-        Set<String> fileSet = dataFileService.getFileList(startDate, endDate);
+        Set<String> fileSet = dataFileService.getFileNameList(startDate, endDate);
 
         HouseQuery houseQuery = new HouseQuery();
         houseQuery.setStartCrawlDate(DateUtil.parse(startDate, DateUtil.YYYYMMDD));

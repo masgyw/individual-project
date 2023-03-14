@@ -4,13 +4,17 @@ import cn.gyw.individual.backend.service.config.HouseProperties;
 import cn.gyw.individual.backend.service.enums.HouseTypeEnum;
 import cn.gyw.individual.backend.service.shedule.HouseInfoCsvReader;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,10 +33,10 @@ public class DataFileServiceImpl implements DataFileService {
     private HouseInfoCsvReader houseInfoCsvReader;
 
     @Override
-    public Set<String> getFileList(String startDate, String endDate) {
+    public Set<String> getFileNameList(String startDate, String endDate) {
         String fileRoot = houseProperties.getStorageDir();
         try {
-            return Files.walk(Paths.get(fileRoot), 1)
+            return Files.walk(Paths.get(fileRoot), 2)
                     // 文件后缀过滤
                     .filter(path -> path.toString().endsWith(DATA_FILE_SUFFIX))
                     // houseType 过滤
@@ -51,6 +55,33 @@ public class DataFileServiceImpl implements DataFileService {
             log.error("读取数据文件异常：", e);
         }
         return Collections.emptySet();
+    }
+
+    @Override
+    public List<File> findFile(String fileName, String crawlDate) {
+        String fileRoot = houseProperties.getStorageDir();
+        try {
+            return Files.walk(Paths.get(fileRoot), 1)
+                    .peek(path -> log.info("访问文件path :{}", path.toString()))
+                    // 文件名过滤
+                    .filter(path -> {
+                        if (StringUtils.isEmpty(fileName)) {
+                            return true;
+                        }
+                        return path.getFileName().toString().equals(fileName);
+                    })
+                    // 爬取日期过滤
+                    .filter(path -> {
+                        if (StringUtils.isEmpty(crawlDate)) {
+                            return true;
+                        }
+                        return path.getFileName().toString().contains(crawlDate);
+                    })
+                    .map(Path::toFile).collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
     }
 
     @Override

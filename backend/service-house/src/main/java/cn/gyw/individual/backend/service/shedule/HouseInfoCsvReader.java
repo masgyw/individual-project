@@ -1,14 +1,17 @@
 package cn.gyw.individual.backend.service.shedule;
 
 import cn.gyw.individual.backend.service.creator.HouseCreator;
+import cn.gyw.individual.backend.service.enums.HouseTypeEnum;
+import cn.gyw.individual.backend.service.enums.OriginTypeEnum;
 import cn.gyw.individual.backend.service.query.HouseQuery;
+import cn.gyw.individual.backend.service.service.DataFileService;
 import cn.gyw.individual.backend.service.service.IHouseService;
 import cn.gyw.individual.backend.service.vo.HouseVO;
 import cn.gyw.individual.commons.model.PageRequestWrapper;
 import cn.gyw.individual.commons.utils.DateUtil;
+import cn.gyw.individual.commons.utils.RegexUtil;
 import com.opencsv.CSVReader;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +20,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
-import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 /**
  * 房屋信息CSV数据文件读取入库
@@ -52,6 +52,8 @@ public class HouseInfoCsvReader {
 
     private IHouseService houseInfoService;
 
+    private DataFileService dataFileService;
+
     /**
      * 读取本地数据文件并保存DB
      *
@@ -63,7 +65,7 @@ public class HouseInfoCsvReader {
             log.info("文件[{}]数据已经入库，无需再次入库！", fileName);
             return false;
         }
-        List<File> fileList = findCsvFile(fileName, null);
+        List<File> fileList = dataFileService.findFile(fileName, null);
         return readAndSaveDB(fileList);
     }
 
@@ -79,7 +81,7 @@ public class HouseInfoCsvReader {
             log.info("日期[{}]数据已经入库，无需再次入库！", yesterdayDateStr);
             return false;
         }
-        List<File> fileList = findCsvFile(null, yesterdayDateStr);
+        List<File> fileList = dataFileService.findFile(null, yesterdayDateStr);
         return readAndSaveDB(fileList);
     }
 
@@ -98,7 +100,7 @@ public class HouseInfoCsvReader {
                 return false;
             }
             // 3. 存储到关系型数据库
-            isSuccess = saveDB(dataList);
+            isSuccess = houseInfoService.batchInsert(dataList);
             log.info("存储文件[{}],结果：{}", file.getName(), isSuccess);
             // 4. 文件处理成功后，移动文件到已处理目录
             if (isSuccess) {
@@ -125,10 +127,6 @@ public class HouseInfoCsvReader {
         } catch (IOException e) {
             log.error("文件移动失败：", e);
         }
-    }
-
-    private boolean saveDB(List<HouseCreator> dataList) {
-        return houseInfoService.batchInsert(dataList);
     }
 
     private List<HouseCreator> readCsvData(File file) {
@@ -169,19 +167,28 @@ public class HouseInfoCsvReader {
         for (int i = 0, len = enHeaders.length; i < len; i++) {
             String prop = enHeaders[i];
             try {
-                Field f = creatorFieldMap.computeIfAbsent(prop, (k) -> {
-                    Field field = ReflectionUtils.findField(HouseCreator.class, prop);
-                    Objects.requireNonNull(field).setAccessible(true);
-                    return field;
-                });
+                Field f = getField(prop);
                 if (f.getName().equals("crawlDate")) {
                     f.set(houseCreator, DateUtil.parse(data[i], DateUtil.YYYYMMDD));
                     continue;
                 }
                 if (f.getType() == BigDecimal.class) {
-                    f.set(houseCreator, new BigDecimal(data[i]));
+                    BigDecimal num = BigDecimal.ZERO;
+                    if (StringUtils.isNotBlank(data[i])) {
+                        num = RegexUtil.getBeginNum(data[i]);
+                    }
+                    f.set(houseCreator, num);
+                    continue;
                 }
-
+                if (f.getName().equals("houseType")) {
+                    f.set(houseCreator, HouseTypeEnum.getCode(data[i]));
+                    continue;
+                }
+                if (f.getName().equals("originType")) {
+                    f.set(houseCreator, OriginTypeEnum.getCode(data[i]));
+                    continue;
+                }
+                // 其他字段，默认处理
                 f.set(houseCreator, data[i]);
             } catch (Exception e) {
                 log.error("write filed error [" + prop + "] , error :", e);
@@ -190,32 +197,12 @@ public class HouseInfoCsvReader {
         return houseCreator;
     }
 
-    private List<File> findCsvFile(final String fileName, String crawlDate) {
-        Path storageDir = Paths.get(Paths.get(csvStorageDir).toUri());
-        try {
-            return Files.walk(storageDir)
-                    .peek(path -> log.debug("访问文件path :{}", path.toString()))
-                    // 文件后缀过滤
-                    .filter(path -> path.getFileName().toString().endsWith(".csv"))
-                    // 文件名过滤
-                    .filter(path -> {
-                        if (StringUtils.isEmpty(fileName)) {
-                            return true;
-                        }
-                        return path.getFileName().toString().equals(fileName);
-                    })
-                    // 爬取日期过滤
-                    .filter(path -> {
-                        if (StringUtils.isEmpty(crawlDate)) {
-                            return true;
-                        }
-                        return path.getFileName().toString().contains(crawlDate);
-                    })
-                    .map(Path::toFile).collect(Collectors.toList());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return Collections.emptyList();
+    private Field getField(String prop) {
+        return creatorFieldMap.computeIfAbsent(prop, (k) -> {
+            Field field = ReflectionUtils.findField(HouseCreator.class, prop);
+            Objects.requireNonNull(field).setAccessible(true);
+            return field;
+        });
     }
 
     /**
@@ -243,5 +230,10 @@ public class HouseInfoCsvReader {
     @Autowired
     public void setHouseInfoService(IHouseService houseInfoService) {
         this.houseInfoService = houseInfoService;
+    }
+
+    @Autowired
+    public void setDataFileService(DataFileService dataFileService) {
+        this.dataFileService = dataFileService;
     }
 }
