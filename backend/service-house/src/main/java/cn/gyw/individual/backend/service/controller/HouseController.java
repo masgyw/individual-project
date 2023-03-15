@@ -1,32 +1,23 @@
 // ---Auto Generated ---
 package cn.gyw.individual.backend.service.controller;
 
-import cn.gyw.individual.backend.service.creator.HouseCreator;
-import cn.gyw.individual.backend.service.mapper.HouseMapper;
-import cn.gyw.individual.backend.service.query.HouseQuery;
-import cn.gyw.individual.backend.service.request.HouseCreateRequest;
-import cn.gyw.individual.backend.service.request.HouseQueryRequest;
-import cn.gyw.individual.backend.service.request.HouseUpdateRequest;
-import cn.gyw.individual.backend.service.service.IHouseService;
-import cn.gyw.individual.backend.service.updater.HouseUpdater;
-import cn.gyw.individual.backend.service.vo.HouseVO;
+import cn.gyw.individual.backend.service.api.request.HouseCreateRequest;
+import cn.gyw.individual.backend.service.api.request.HouseQueryRequest;
+import cn.gyw.individual.backend.service.api.request.HouseUpdateRequest;
+import cn.gyw.individual.backend.service.domain.house.creator.HouseCreator;
+import cn.gyw.individual.backend.service.domain.house.mapper.HouseMapper;
+import cn.gyw.individual.backend.service.domain.house.query.HouseQuery;
+import cn.gyw.individual.backend.service.domain.house.service.IHouseService;
+import cn.gyw.individual.backend.service.domain.house.updater.HouseUpdater;
+import cn.gyw.individual.backend.service.domain.house.vo.HouseVO;
 import cn.gyw.individual.commons.enums.CodeEnum;
 import cn.gyw.individual.commons.model.DataResponse;
 import cn.gyw.individual.commons.model.PageData;
 import cn.gyw.individual.commons.model.PageRequestWrapper;
-
-import java.lang.Long;
-import java.lang.String;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j

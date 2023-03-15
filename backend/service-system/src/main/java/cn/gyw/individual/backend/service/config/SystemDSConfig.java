@@ -10,7 +10,6 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -27,25 +26,24 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(entityManagerFactoryRef = "houseEntityManagerFactory",
-        transactionManagerRef = "houseTransactionManager", basePackages = "cn.gyw.individual.backend.service.domain.house.repository")
-public class HouseDSConfig {
+@EnableJpaRepositories(entityManagerFactoryRef = "systemEntityManagerFactory",
+        transactionManagerRef = "systemTransactionManager", basePackages = "cn.gyw.individual.backend.service.domain.admin")
+public class SystemDSConfig {
 
-    @Value("${house.datasource.username}")
+    @Value("${system.datasource.username}")
     private String username;
 
-    @Value("${house.datasource.url}")
+    @Value("${system.datasource.url}")
     private String jdbcUrl;
 
-    @Value("${house.datasource.driver-class-name}")
+    @Value("${system.datasource.driver-class-name}")
     private String driverClass;
 
     private IConfiguration config = new ConfigurationOnFileYaml();
 
-    @Primary
-    @Bean(name = "houseDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.house")
-    public DataSource houseDataSource() {
+    @Bean(name = "systemDataSource")
+    @ConfigurationProperties(prefix = "spring.datasource.system")
+    public DataSource systemDataSource() {
         String host = config.getValue("hw-cloud.datasource", "host");
         String pwd = config.getValue("hw-cloud.datasource", "password");
         // 自动选择
@@ -61,18 +59,16 @@ public class HouseDSConfig {
         return ds;
     }
 
-    @Primary
-    @Bean(name = "houseEntityManagerFactory")
+    @Bean(name = "systemEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder,
-                                                                       @Qualifier("houseDataSource") DataSource dataSource) {
+                                                                       @Qualifier("systemDataSource") DataSource dataSource) {
         return builder.dataSource(dataSource)
-                .packages("cn.gyw.individual.backend.service.domain.house")
-                .persistenceUnit("house").build();
+                .packages("cn.gyw.individual.backend.service.domain.admin")
+                .persistenceUnit("system").build();
     }
 
-    @Primary
-    @Bean(name = "houseTransactionManager")
-    public PlatformTransactionManager transactionManager(@Qualifier("houseEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
+    @Bean(name = "systemTransactionManager")
+    public PlatformTransactionManager transactionManager(@Qualifier("systemEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
     }
 }

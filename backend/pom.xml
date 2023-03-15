@@ -6,6 +6,7 @@
   <modules>
     <module>app</module>
     <module>service-house</module>
+    <module>service-system</module>
   </modules>
   <parent>
     <groupId>cn.gyw.individual</groupId>

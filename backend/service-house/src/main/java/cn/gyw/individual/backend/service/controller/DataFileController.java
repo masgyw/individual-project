@@ -1,11 +1,11 @@
 package cn.gyw.individual.backend.service.controller;
 
-import cn.gyw.individual.backend.service.query.HouseQuery;
-import cn.gyw.individual.backend.service.response.DataFileResponse;
-import cn.gyw.individual.backend.service.service.DataFileService;
-import cn.gyw.individual.backend.service.service.IHouseService;
-import cn.gyw.individual.backend.service.vo.BaseHouseVO;
-import cn.gyw.individual.backend.service.vo.HouseVO;
+import cn.gyw.individual.backend.service.domain.house.query.HouseQuery;
+import cn.gyw.individual.backend.service.api.response.DataFileResponse;
+import cn.gyw.individual.backend.service.domain.house.service.DataFileService;
+import cn.gyw.individual.backend.service.domain.house.service.IHouseService;
+import cn.gyw.individual.backend.service.domain.house.vo.BaseHouseVO;
+import cn.gyw.individual.backend.service.domain.house.vo.HouseVO;
 import cn.gyw.individual.commons.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,0 +1,6 @@
+system:
+  datasource:
+    username: root
+    password:
+    url: jdbc:mysql://%s:3306/backend_res?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.jdbc.Driver

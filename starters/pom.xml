@@ -5,6 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <modules>
     <module>jpa-spring-boot-starter</module>
+    <module>security-spring-boot-starter</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>

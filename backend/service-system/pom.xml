@@ -9,7 +9,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>service-house</artifactId>
+  <artifactId>service-system</artifactId>
 
   <properties>
     <maven.compiler.source>8</maven.compiler.source>
@@ -52,57 +52,16 @@
       <artifactId>opencsv</artifactId>
       <version>5.5.2</version>
     </dependency>
-    <!--    <dependency>-->
-    <!--      <groupId>com.querydsl</groupId>-->
-    <!--      <artifactId>querydsl-apt</artifactId>-->
-    <!--      <scope>provided</scope>-->
-    <!--    </dependency>-->
-    <!--    <dependency>-->
-    <!--      <groupId>com.querydsl</groupId>-->
-    <!--      <artifactId>querydsl-jpa</artifactId>-->
-    <!--    </dependency>-->
     <!-- 权限模块 -->
     <dependency>
       <groupId>cn.gyw.individual</groupId>
       <artifactId>security-spring-boot-starter</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
-    <!-- 监控模块-->
-    <!--    <dependency>-->
-    <!--      <groupId>org.springframework.boot</groupId>-->
-    <!--      <artifactId>spring-boot-starter-actuator</artifactId>-->
-    <!--    </dependency>-->
-    <!--    <dependency>-->
-    <!--      <groupId>io.micrometer</groupId>-->
-    <!--      <artifactId>micrometer-prometheus-starter</artifactId>-->
-    <!--      <version>0.11.0.RELEASE</version>-->
-    <!--    </dependency>-->
-    <!-- ES 搜索引擎-->
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.boot</groupId>-->
-<!--      <artifactId>spring-boot-starter-data-elasticsearch</artifactId>-->
-<!--    </dependency>-->
-    <!-- 审计 -->
-<!--    <dependency>-->
-<!--      <groupId>org.javers</groupId>-->
-<!--      <artifactId>javers-core</artifactId>-->
-<!--      <version>6.6.5</version>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>one.util</groupId>-->
-<!--      <artifactId>streamex</artifactId>-->
-<!--      <version>0.8.1</version>-->
-<!--    </dependency>-->
-    <!-- 浏览器信息 -->
-<!--    <dependency>-->
-<!--      <groupId>eu.bitwalker</groupId>-->
-<!--      <artifactId>UserAgentUtils</artifactId>-->
-<!--      <version>1.21</version>-->
-<!--    </dependency>-->
   </dependencies>
 
   <build>
-    <finalName>service-house</finalName>
+    <finalName>service-system</finalName>
     <resources>
       <resource>
         <directory>src/main/resources</directory>
@@ -149,24 +108,6 @@
           </annotationProcessorPaths>
         </configuration>
       </plugin>
-
-      <!--      <plugin>-->
-      <!--        <groupId>com.mysema.maven</groupId>-->
-      <!--        <artifactId>apt-maven-plugin</artifactId>-->
-      <!--        <version>1.1.3</version>-->
-      <!--        <executions>-->
-      <!--          <execution>-->
-      <!--            <goals>-->
-      <!--              <goal>process</goal>-->
-      <!--            </goals>-->
-      <!--            <configuration>-->
-      <!--              <outputDirectory>target/generated-sources/java</outputDirectory>-->
-      <!--              <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>-->
-      <!--            </configuration>-->
-      <!--          </execution>-->
-      <!--        </executions>-->
-      <!--      </plugin>-->
     </plugins>
   </build>
-
 </project>
