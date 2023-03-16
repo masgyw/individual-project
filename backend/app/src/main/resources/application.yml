@@ -1,3 +1,5 @@
+server:
+  port: 9090
 spring:
   datasource:
     tomcat:
@@ -20,3 +22,14 @@ spring:
         order_inserts: true
   profiles:
     active: house,system
+logging:
+  level:
+    cn:
+      gyw: debug
+cn:
+  gyw:
+    security:
+      enable: true
+      urls:
+        un-auth-urls:
+          - /v3/api-docs/**
