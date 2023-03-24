@@ -33,3 +33,28 @@ cn:
       urls:
         un-auth-urls:
           - /v3/api-docs/**
+
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: cn.gyw.backend
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  # 开启Swagger的Basic认证功能,默认是false
+  basic:
+    enable: false
+    # Basic认证用户名
+    username: test
+    # Basic认证密码
+    password: 123
+  setting:
+    language: zh_cn

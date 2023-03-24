@@ -1,4 +1,4 @@
-package cn.gyw.individual.backend.app.infrastructure.config;
+package cn.gyw.backend.infrastructure.config;
 
 import cn.gyw.individual.commons.enums.CodeEnum;
 import cn.gyw.individual.commons.exceptions.BaseException;

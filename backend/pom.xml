@@ -7,6 +7,7 @@
     <module>app</module>
     <module>service-house</module>
     <module>service-system</module>
+    <module>service-template</module>
   </modules>
   <parent>
     <groupId>cn.gyw.individual</groupId>
@@ -20,6 +21,9 @@
   <properties>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
+    <!-- openapi doc -->
+    <springdoc-openapi.version>1.6.9</springdoc-openapi.version>
+    <knife4j-openapi3.version>4.0.0</knife4j-openapi3.version>
   </properties>
 
   <dependencies>
@@ -29,10 +33,26 @@
     </dependency>
 
     <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-ui</artifactId>
+      <version>${springdoc-openapi.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
     </dependency>
   </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.github.xiaoymin</groupId>
+        <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
+        <version>${knife4j-openapi3.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <build>
     <plugins>
       <plugin>

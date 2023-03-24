@@ -27,6 +27,11 @@
       <artifactId>service-system</artifactId>
       <version>1.0.0</version>
     </dependency>
+    <!-- knife4j -->
+    <dependency>
+      <groupId>com.github.xiaoymin</groupId>
+      <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
+    </dependency>
 
 <!--    <dependency>-->
 <!--      <groupId>org.springframework.cloud</groupId>-->
@@ -113,6 +118,7 @@
           <include>**/*.properties</include>
           <include>**/*.yml</include>
           <include>**/*.sql</include>
+          <include>**/*.txt</include>
         </includes>
       </resource>
     </resources>
@@ -122,7 +128,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <mainClass>cn.gyw.individual.backend.app.Application</mainClass>
+          <mainClass>cn.gyw.backend.Application</mainClass>
         </configuration>
         <executions>
           <execution>

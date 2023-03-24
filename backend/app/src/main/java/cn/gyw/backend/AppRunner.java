@@ -1,5 +1,6 @@
-package cn.gyw.individual.backend.app;
+package cn.gyw.backend;
 
+import cn.gyw.individual.commons.utils.SystemUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -20,7 +21,10 @@ public class AppRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        log.info("home page = http://localhost:{}", port);
-        log.info("swagger ui = http://localhost:{}/swagger-ui.html", port);
+        String localIp = SystemUtil.getLocalIp();
+        log.info("host ip ={}", localIp);
+        log.info("home page = http://{}:{}", localIp, port);
+        log.info("swagger ui = http://{}:{}/swagger-ui.html", localIp, port);
+        log.info("knife4j ui = http://{}:{}/doc.html", localIp, port);
     }
 }

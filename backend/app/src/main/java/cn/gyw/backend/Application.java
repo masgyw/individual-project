@@ -1,4 +1,4 @@
-package cn.gyw.individual.backend.app;
+package cn.gyw.backend;
 
 import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,15 +11,15 @@ import org.springframework.core.SpringVersion;
  *
  * @date 2023/2/23
  */
-@ConfigurationPropertiesScan(basePackages = "cn.gyw.individual.backend")
-@SpringBootApplication(scanBasePackages = {"cn.gyw.individual.backend"})
+@ConfigurationPropertiesScan(basePackages = "cn.gyw.backend")
+@SpringBootApplication(scanBasePackages = {"cn.gyw.backend"})
 public class Application {
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(Application.class)
                 // 加载spring版本
                 .main(SpringVersion.class)
-                .bannerMode(Banner.Mode.OFF)
+                .bannerMode(Banner.Mode.LOG)
                 .run(args);
     }
 }

@@ -1,4 +1,4 @@
-package cn.gyw.individual.backend.app.infrastructure.config;
+package cn.gyw.backend.infrastructure.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

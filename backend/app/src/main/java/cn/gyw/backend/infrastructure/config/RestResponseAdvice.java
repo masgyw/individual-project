@@ -1,4 +1,4 @@
-package cn.gyw.individual.backend.app.infrastructure.config;
+package cn.gyw.backend.infrastructure.config;
 
 import cn.gyw.individual.commons.model.DataResponse;
 import org.slf4j.Logger;
