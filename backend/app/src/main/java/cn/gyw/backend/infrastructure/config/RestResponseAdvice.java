@@ -19,7 +19,7 @@ import java.util.Objects;
 /**
  * 返回值封装
  */
-@ControllerAdvice(basePackages = {"cn.gyw"})
+@ControllerAdvice(basePackages = {"cn.gyw.backend"})
 public class RestResponseAdvice implements ResponseBodyAdvice<Object> {
 
     private final Logger LOGGER = LoggerFactory.getLogger(RestResponseAdvice.class);
