@@ -7,10 +7,11 @@ spring:
       validation-query: SELECT  1
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
     show-sql: true
+    # 显式设置为true，最后框架会选择update方式
     generate-ddl: true
     open-in-view: false
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect

@@ -21,7 +21,7 @@ public enum ValidStatus implements BaseEnum<ValidStatus> {
     }
 
     @Override
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 

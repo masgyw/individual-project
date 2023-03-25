@@ -27,8 +27,11 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(entityManagerFactoryRef = "systemEntityManagerFactory",
-        transactionManagerRef = "systemTransactionManager", basePackages = "cn.gyw.backend.system")
+        transactionManagerRef = "systemTransactionManager",
+        basePackages = {"cn.gyw.backend.system", "cn.gyw.backend.template"})
 public class SystemDSConfig {
+
+    public static final String[] PACKAGES_TO_SCAN = new String[]{"cn.gyw.backend.system", "cn.gyw.backend.template"};
 
     @Value("${system.datasource.username}")
     private String username;
@@ -63,7 +66,7 @@ public class SystemDSConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder,
                                                                        @Qualifier("systemDataSource") DataSource dataSource) {
         return builder.dataSource(dataSource)
-                .packages("cn.gyw.backend.system")
+                .packages(PACKAGES_TO_SCAN)
                 .persistenceUnit("system").build();
     }
 

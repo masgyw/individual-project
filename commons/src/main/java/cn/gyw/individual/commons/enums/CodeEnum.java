@@ -40,7 +40,7 @@ public enum CodeEnum implements BaseEnum<CodeEnum>, BusinessExceptionAssert {
     }
 
     @Override
-    public int getCode() {
+    public Integer getCode() {
         return this.code;
     }
 

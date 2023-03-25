@@ -7,7 +7,7 @@ public interface BaseEnum<T extends Enum<T> & BaseEnum<T>> {
      *
      * @return 获取编码
      */
-    int getCode();
+    Integer getCode();
 
     /**
      * 获取编码名称，便于维护

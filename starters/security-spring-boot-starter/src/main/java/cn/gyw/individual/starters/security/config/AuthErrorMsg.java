@@ -33,7 +33,7 @@ public enum AuthErrorMsg implements BaseEnum<AuthErrorMsg> {
   private String name;
 
   @Override
-  public int getCode() {
+  public Integer getCode() {
     return this.code;
   }
 
