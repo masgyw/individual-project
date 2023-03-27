@@ -6,10 +6,12 @@ spring:
       test-on-borrow: true
       validation-query: SELECT  1
   jpa:
-    hibernate:
-      ddl-auto: create
-      naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+#    hibernate:
+#      ddl-auto: update
+#      naming:
+#        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+#        多数据源不生效
+#        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
     show-sql: true
     # 显式设置为true，最后框架会选择update方式
     generate-ddl: true
@@ -21,6 +23,10 @@ spring:
         jdbc:
           batch_size: 1000
         order_inserts: true
+        ddl-auto: update
+#       implicit_naming_strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        # column 下划线
+        physical_naming_strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
   profiles:
     active: house,system
 logging:
