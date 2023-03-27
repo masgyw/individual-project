@@ -1,6 +1,5 @@
 package cn.gyw.individual.starters.security.base;
 
-import cn.gyw.individual.commons.annotations.FieldDesc;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -14,15 +13,11 @@ import java.util.Map;
 @Data
 public abstract class BaseJwtUser implements Serializable {
 
-    @FieldDesc(name = "用户Id")
     private Long userId;
 
-    @FieldDesc(name = "用户名")
     private String username;
 
-    @FieldDesc(name = "额外信息")
     private Map<String, String> extInfo;
 
-    @FieldDesc(name = "权限信息")
     private Collection<? extends GrantedAuthority> authorities;
 }

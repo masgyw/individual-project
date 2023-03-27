@@ -8,6 +8,7 @@
     <module>service-house</module>
     <module>service-system</module>
     <module>service-template</module>
+    <module>service-asset</module>
   </modules>
   <parent>
     <groupId>cn.gyw.individual</groupId>
