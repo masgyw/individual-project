@@ -84,6 +84,22 @@ public class AssetEventProcessor {
     }
 
     /**
+     * 保存入库记录
+     */
+    @EventListener
+    public void handleAssetInForRecord(AssetEvents.AssetInEvent inEvent) {
+        AssetBizInfo bizInfo = inEvent.getBizInfo();
+        AssetInOutRecordCreator creator = new AssetInOutRecordCreator();
+        creator.setInOutBizType(bizInfo.getInOutBizType());
+        creator.setInOutType(InOutType.IN);
+        creator.setBatchNo(bizInfo.getBatchNo());
+        creator.setGenBatchNo(bizInfo.getGenBatchNo());
+        creator.setOperateUser(bizInfo.getOperateUser());
+        creator.setTotalCount(bizInfo.getUniqueCodes().size());
+        assetInOutRecordService.createAssetInOutRecord(bizInfo.getUniqueCodes(), creator);
+    }
+
+    /**
      * 保存出库记录
      */
     @EventListener
