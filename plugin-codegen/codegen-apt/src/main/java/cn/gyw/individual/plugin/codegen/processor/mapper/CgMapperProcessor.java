@@ -31,7 +31,6 @@ public class CgMapperProcessor extends BaseCodeGenProcessor {
     protected void generateClass(TypeElement typeElement, RoundEnvironment roundEnvironment) {
         String className = typeElement.getSimpleName() + SUFFIX;
         String packageName = typeElement.getAnnotation(CgMapper.class).pkgName();
-        System.out.println("packageName = " + packageName);
         AnnotationSpec mapperAnnotation = AnnotationSpec.builder(Mapper.class)
                 .addMember("uses", "$T.class", GenericEnumMapper.class)
                 .addMember("uses", "$T.class", DateMapper.class)

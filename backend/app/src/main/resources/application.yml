@@ -31,8 +31,11 @@ spring:
     active: house,system
 logging:
   level:
-    cn:
-      gyw: debug
+    cn.gyw: debug
+    org.hibernate.SQL: debug
+    org.hibernate.engine.QueryParameters: debug
+    org.hibernate.engine.query.HQLQueryPlan: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
 cn:
   gyw:
     security:

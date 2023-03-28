@@ -28,10 +28,11 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @EnableJpaRepositories(entityManagerFactoryRef = "systemEntityManagerFactory",
         transactionManagerRef = "systemTransactionManager",
-        basePackages = {"cn.gyw.backend.system", "cn.gyw.backend.template"})
+        basePackages = {"cn.gyw.backend.system", "cn.gyw.backend.template", "cn.gyw.backend.asset"})
 public class SystemDSConfig {
 
-    public static final String[] PACKAGES_TO_SCAN = new String[]{"cn.gyw.backend.system", "cn.gyw.backend.template"};
+    public static final String[] PACKAGES_TO_SCAN = new String[]{"cn.gyw.backend.system", "cn.gyw.backend.template",
+            "cn.gyw.backend.asset"};
 
     @Value("${system.datasource.username}")
     private String username;

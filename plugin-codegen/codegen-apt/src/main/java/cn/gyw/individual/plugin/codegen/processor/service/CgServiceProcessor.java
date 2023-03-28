@@ -1,11 +1,11 @@
 package cn.gyw.individual.plugin.codegen.processor.service;
 
 
+import cn.gyw.individual.commons.model.PageRequestWrapper;
 import cn.gyw.individual.plugin.codegen.processor.BaseCodeGenProcessor;
 import cn.gyw.individual.plugin.codegen.processor.DefaultNameContext;
 import cn.gyw.individual.plugin.codegen.spi.CodeGenProcessor;
 import cn.gyw.individual.plugin.codegen.util.StringUtils;
-import cn.gyw.individual.commons.model.PageRequestWrapper;
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
@@ -19,13 +19,17 @@ import javax.lang.model.element.TypeElement;
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 
-
+/**
+ * Service 实现类
+ */
 @AutoService(value = CodeGenProcessor.class)
 public class CgServiceProcessor extends BaseCodeGenProcessor {
 
     public static final String SERVICE_SUFFIX = "Service";
-
-    public static final String SERVICE_PREFIX = "I";
+    /**
+     * Service 前缀 不使用I
+     */
+    public static final String SERVICE_PREFIX = "";
 
     @Override
     protected void generateClass(TypeElement typeElement, RoundEnvironment roundEnvironment) {

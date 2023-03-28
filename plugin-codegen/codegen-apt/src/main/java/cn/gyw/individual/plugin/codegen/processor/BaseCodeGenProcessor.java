@@ -302,9 +302,10 @@ public abstract class BaseCodeGenProcessor implements CodeGenProcessor {
             String sourceFileName = path.toFile().getAbsolutePath() + File.separator + packagePath;
             File sourceFile = new File(sourceFileName);
             if (sourceFile.exists() && !overrideSource) {
-                System.out.println("源码文件存在不生成：" + file.getAbsolutePath());
+                System.out.println("源码文件存在不生成：" + sourceFile.getAbsolutePath());
                 return;
             }
+            System.out.println("生成源码文件：" + sourceFileName);
             // 不存在 或 覆盖，先删除源文件后创建
             Files.deleteIfExists(Paths.get(sourceFileName));
             javaFile.writeTo(file);
