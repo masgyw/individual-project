@@ -10,6 +10,7 @@ import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
@@ -40,6 +41,7 @@ public class AssetServiceTest {
         warehouseService.createWarehouse(creator);
     }
 
+    @Commit
     @Test
     public void testSkuIn() {
         List<String> uniqueCodes = Lists.newArrayList();
@@ -54,5 +56,37 @@ public class AssetServiceTest {
         model.setUniqueCodes(uniqueCodes);
         model.setName("白色苹果手机");
         assetDomainService.assetIn(model);
+    }
+
+    @Test
+    public void testSkuIn2() {
+        List<String> uniqueCodes = Lists.newArrayList();
+        uniqueCodes.add("222222");
+        uniqueCodes.add("333333");
+        uniqueCodes.add("444444");
+        BatchInOutModel model = new BatchInOutModel();
+        model.setSkuId(2L);
+        model.setBatchNo("22222");
+        model.setInOutBizType(InOutBizType.IN_FIRST);
+        model.setOperateUser("用户2");
+        model.setHouseId(1L);
+        model.setUniqueCodes(uniqueCodes);
+        model.setName("黑色苹果手机");
+        assetDomainService.assetIn(model);
+    }
+
+    @Test
+    public void testSkuOut() {
+        List<String> uniqueCodes = Lists.newArrayList();
+        uniqueCodes.add("123456");
+        BatchInOutModel model = new BatchInOutModel();
+        model.setSkuId(3L);
+        model.setBatchNo("77777");
+        model.setInOutBizType(InOutBizType.OUT_SALE);
+        model.setOperateUser("测试用户1");
+        model.setHouseId(1L);
+        model.setUniqueCodes(uniqueCodes);
+        model.setName("白色苹果手机");
+        assetDomainService.assetOut(model);
     }
 }

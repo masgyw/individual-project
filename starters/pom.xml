@@ -6,6 +6,7 @@
   <modules>
     <module>jpa-spring-boot-starter</module>
     <module>security-spring-boot-starter</module>
+    <module>mybatis-spring-boot-starter</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>

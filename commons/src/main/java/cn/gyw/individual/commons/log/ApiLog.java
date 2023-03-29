@@ -2,61 +2,66 @@ package cn.gyw.individual.commons.log;
 
 import lombok.Data;
 
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * 请求API日志对象
+ */
 @Data
-public class ApiLog {
+public class ApiLog implements Serializable {
 
+    private static final long serialVersionUID = -2819065952237845813L;
     /**
-     * 操作描述
+     * 日志id
      */
-    private String description;
-
+    private String sequenceNum;
     /**
-     * 操作用户
+     * 当前操作人id
      */
-    private String username;
-
+    private String loginAccount;
     /**
-     * 操作时间
+     * 服务api
      */
-    private Long startTime;
-
+    private String host;
     /**
-     * 消耗时间
+     * 服务端口
      */
-    private Integer spendTime;
-
+    private String port;
     /**
-     * 根路径
+     * 操作请求的链接
      */
-    private String basePath;
-
+    private String actionUrl;
     /**
-     * URI
+     * 执行的模块
      */
-    private String uri;
-
+    private String module;
     /**
-     * URL
-     */
-    private String url;
-
-    /**
-     * 请求类型
+     * 执行的方法
      */
     private String method;
-
     /**
-     * IP地址
+     * 描述
      */
-    private String ip;
-
+    private String desc;
     /**
-     * 请求参数
+     * 请求查询参数
      */
-    private Object parameter;
-
+    private String queryParam;
     /**
-     * 返回结果
+     * 请求数据
      */
-    private Object result;
+    private String reqData;
+    /**
+     * 响应码
+     */
+    private String respCode;
+    /**
+     * 响应数据
+     */
+    private String respData;
+    /**
+     * 执行的时间
+     */
+    private Date gmtCreate;
 }

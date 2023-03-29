@@ -29,7 +29,9 @@ spring:
         physical_naming_strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
   profiles:
     active: house,system
+# 日志配置
 logging:
+  config: classpath:log/logback.xml
   level:
     cn.gyw: debug
     org.hibernate.SQL: debug

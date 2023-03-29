@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="10 seconds">
+
+  <contextName>backend</contextName>
+
+  <property name="LOG_HOME" value="${user.home}/Temp"/>
+  <property name="APP_NAME" value="backend"/>
+  <property name="CONSOLE_LOG_PATTERN"
+            value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%15.15thread] %logger{39} [%method.%line] : %msg%n"/>
+
+  <!--输出到控制台-->
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>DEBUG</level>
+    </filter>
+    <encoder>
+      <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+  </appender>
+  <!--应用日志-->
+  <appender name="APP_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_HOME}/${APP_NAME}/app.log</file>
+    <encoder>
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/${APP_NAME}/%d{yyyyMMdd,aux}/app-%d{yyyyMMdd}.%i.log</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>100MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+      <maxHistory>15</maxHistory>
+    </rollingPolicy>
+    <!-- 记录debug 级别以上的日志 -->
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>DEBUG</level>
+    </filter>
+  </appender>
+  <!--框架日志-->
+  <appender name="FRAMEWORK_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_HOME}/${APP_NAME}/framework.log</file>
+    <encoder>
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+      <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/${APP_NAME}/%d{yyyyMMdd,aux}/framework-%d{yyyyMMdd}.%i.log
+      </fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>100MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+      <maxHistory>15</maxHistory>
+    </rollingPolicy>
+    <!-- 记录debug 级别以上的日志 -->
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>DEBUG</level>
+    </filter>
+  </appender>
+  <!--异常日志-->
+  <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_HOME}/${APP_NAME}/error.log</file>
+    <encoder>
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+      <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+    </encoder>
+    <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/${APP_NAME}/%d{yyyyMMdd,aux}/error-%d{yyyyMMdd}.%i.log</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>100MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+      <!--日志文件保留天数-->
+      <maxHistory>15</maxHistory>
+    </rollingPolicy>
+    <!-- 此日志文件只记录ERROR级别的 -->
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>ERROR</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+  </appender>
+  <!-- 接口日志 -->
+  <appender name="API_FILE" class="ch.qos.logback.classic.sift.SiftingAppender">
+    <!-- in the absence of the class attribute, it is assumed that the
+         desired discriminator type is
+         ch.qos.logback.classic.sift.MDCBasedDiscriminator -->
+    <discriminator>
+      <Key>apiCode</Key>
+      <DefaultValue>unknown</DefaultValue>
+    </discriminator>
+    <sift>
+      <appender name="api-${apiCode}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_DIR}/${APP_NAME}/api/${apiCode}.log</File>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+          <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+          <fileNamePattern>${LOG_DIR}/${APP_NAME}/%d{yyyyMMdd}/api/${apiCode}.log</fileNamePattern>
+        </rollingPolicy>
+      </appender>
+    </sift>
+  </appender>
+
+  <root level="info">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+
+  <!-- SQL 日志设置 -->
+  <logger name="cn.gyw.backend" level="info" additivity="false">
+    <appender-ref ref="ERROR_FILE"/>
+  </logger>
+  <logger name="cn.gyw.backend" level="info" additivity="false">
+    <appender-ref ref="API_FILE"/>
+  </logger>
+  <logger name="cn.gyw.backend" level="debug" additivity="false">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="APP_FILE"/>
+  </logger>
+
+  <logger name="org.hibernate" level="info" additivity="false"/>
+  <logger name="org.springframework.web" level="debug" additivity="false"/>
+  <!-- SQL 日志打印 -->
+  <logger name="org.hibernate.SQL" level="debug" additivity="false"/>
+  <logger name="org.hibernate.engine.QueryParameters" level="debug" additivity="false"/>
+  <logger name="org.hibernate.engine.query.HQLQueryPlan" level="debug" additivity="false"/>
+  <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace" additivity="false"/>
+  <logger name="org.springframework.orm.jpa" level="debug" additivity="false"/>
+  <logger name="org.springframework.transaction" level="debug" additivity="false"/>
+
+</configuration>
