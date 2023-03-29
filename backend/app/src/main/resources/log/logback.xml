@@ -86,12 +86,12 @@
          desired discriminator type is
          ch.qos.logback.classic.sift.MDCBasedDiscriminator -->
     <discriminator>
-      <Key>apiCode</Key>
-      <DefaultValue>unknown</DefaultValue>
+      <key>apiCode</key>
+      <defaultValue>unknown</defaultValue>
     </discriminator>
     <sift>
       <appender name="api-${apiCode}" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${LOG_DIR}/${APP_NAME}/api/${apiCode}.log</File>
+        <file>${LOG_DIR}/${APP_NAME}/api/${apiCode}.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
           <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
         </encoder>
@@ -101,10 +101,6 @@
       </appender>
     </sift>
   </appender>
-
-  <root level="info">
-    <appender-ref ref="CONSOLE"/>
-  </root>
 
   <!-- SQL 日志设置 -->
   <logger name="cn.gyw.backend" level="info" additivity="false">
@@ -127,5 +123,9 @@
   <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace" additivity="false"/>
   <logger name="org.springframework.orm.jpa" level="debug" additivity="false"/>
   <logger name="org.springframework.transaction" level="debug" additivity="false"/>
+
+  <root level="info">
+    <appender-ref ref="CONSOLE"/>
+  </root>
 
 </configuration>

@@ -22,7 +22,6 @@ public class AppRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         String localIp = SystemUtil.getLocalIp();
-        log.info("host ip ={}", localIp);
         log.info("home page = http://{}:{}", localIp, port);
         log.info("swagger ui = http://{}:{}/swagger-ui.html", localIp, port);
         log.info("knife4j ui = http://{}:{}/doc.html", localIp, port);

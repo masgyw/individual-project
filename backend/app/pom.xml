@@ -26,6 +26,16 @@
       <groupId>cn.gyw.individual</groupId>
       <artifactId>service-system</artifactId>
       <version>1.0.0</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>mysql-connector-java</artifactId>
+          <groupId>mysql</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>springdoc-openapi-ui</artifactId>
+          <groupId>org.springdoc</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>cn.gyw.individual</groupId>
@@ -46,6 +56,15 @@
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>5.1.47</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-core</artifactId>
     </dependency>
 
     <dependency>
