@@ -1,6 +1,8 @@
 package cn.gyw.backend.infrastructure.config;
 
 import cn.gyw.individual.commons.model.DataResponse;
+import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
@@ -8,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,14 +18,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.util.Objects;
 
-
 /**
  * 返回值封装
  */
+@Slf4j
 @ControllerAdvice(basePackages = {"cn.gyw.backend"})
-public class RestResponseAdvice implements ResponseBodyAdvice<Object> {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(RestResponseAdvice.class);
+public class ResponseAdviceAdapter implements ResponseBodyAdvice<Object> {
 
     @SuppressWarnings("rawtypes")
     @Override
@@ -38,17 +39,13 @@ public class RestResponseAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
                                   Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        Object resp = null;
-        if (body != null) {
-            resp = body;
-        }
-        if (request instanceof ServletServerHttpRequest) {
+        Object resp = body;
+        if (request instanceof ServletServerHttpRequest && response instanceof ServletServerHttpResponse) {
             if (Objects.nonNull(resp) && !(resp instanceof DataResponse)) {
                 resp = DataResponse.success(body);
             }
-        } else {
-            LOGGER.debug("request not servlet web");
         }
+        log.info("响应信息：{}", JSON.toJSONString(resp));
         return resp;
     }
 }
