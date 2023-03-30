@@ -91,12 +91,12 @@
     </discriminator>
     <sift>
       <appender name="api-${apiCode}" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_DIR}/${APP_NAME}/api/${apiCode}.log</file>
+        <file>${LOG_HOME}/${APP_NAME}/api/${apiCode}.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
           <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-          <fileNamePattern>${LOG_DIR}/${APP_NAME}/%d{yyyyMMdd}/api/${apiCode}.log</fileNamePattern>
+          <fileNamePattern>${LOG_HOME}/${APP_NAME}/%d{yyyyMMdd}/api/${apiCode}.log</fileNamePattern>
         </rollingPolicy>
       </appender>
     </sift>
