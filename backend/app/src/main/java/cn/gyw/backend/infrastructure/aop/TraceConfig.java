@@ -30,7 +30,7 @@ public class TraceConfig {
         traceInterceptor.setExceptionMessage("exception");
 
         AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
-        pointcut.setExpression("execution(* cn.gyw.backend..*.*(..))");
+        pointcut.setExpression("execution(* cn.gyw.backend..*Controller.*(..))");
 
         return new DefaultPointcutAdvisor(pointcut, traceInterceptor);
     }

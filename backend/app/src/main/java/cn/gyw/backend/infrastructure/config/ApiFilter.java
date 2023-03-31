@@ -12,10 +12,14 @@ import java.io.IOException;
 /**
  * @date 2023/3/30
  */
+@Component
 public class ApiFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        System.out.println("this is api filter");
+
         filterChain.doFilter(request, response);
     }
 }
