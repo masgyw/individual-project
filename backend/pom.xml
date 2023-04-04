@@ -9,6 +9,7 @@
     <module>service-system</module>
     <module>service-template</module>
     <module>service-asset</module>
+    <module>service-order</module>
   </modules>
   <parent>
     <groupId>cn.gyw.individual</groupId>
@@ -65,6 +66,11 @@
       <dependency>
         <groupId>cn.gyw.platform</groupId>
         <artifactId>configuration</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.gyw.individual</groupId>
+        <artifactId>commons-order</artifactId>
         <version>1.0.0</version>
       </dependency>
       <!-- 三方库 -->

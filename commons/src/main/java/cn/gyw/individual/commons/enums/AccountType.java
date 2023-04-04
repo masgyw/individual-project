@@ -1,6 +1,4 @@
-package cn.gyw.backend.system.domain.user;
-
-import cn.gyw.individual.commons.enums.BaseEnum;
+package cn.gyw.individual.commons.enums;
 
 import java.util.Optional;
 

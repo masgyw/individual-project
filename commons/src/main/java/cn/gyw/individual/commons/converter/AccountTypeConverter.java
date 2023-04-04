@@ -1,4 +1,6 @@
-package cn.gyw.backend.system.domain.user;
+package cn.gyw.individual.commons.converter;
+
+import cn.gyw.individual.commons.enums.AccountType;
 
 import javax.persistence.AttributeConverter;
 

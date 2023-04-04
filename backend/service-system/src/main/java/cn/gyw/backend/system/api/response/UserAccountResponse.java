@@ -1,7 +1,7 @@
 // ---Auto Generated ---
 package cn.gyw.backend.system.api.response;
 
-import cn.gyw.backend.system.domain.user.AccountType;
+import cn.gyw.individual.commons.enums.AccountType;
 import cn.gyw.individual.commons.enums.ValidStatus;
 import cn.gyw.individual.commons.model.AbstractResponse;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -1,7 +1,5 @@
-package cn.gyw.backend.system.domain.user;
+package cn.gyw.backend.order.domain.objectsku;
 
-import cn.gyw.individual.commons.converter.AccountTypeConverter;
-import cn.gyw.individual.commons.enums.AccountType;
 import cn.gyw.individual.commons.enums.ValidStatus;
 import cn.gyw.individual.plugin.codegen.annotations.FieldDesc;
 import cn.gyw.individual.plugin.codegen.processor.api.CgCreateRequest;
@@ -21,41 +19,44 @@ import cn.gyw.individual.plugin.codegen.processor.updater.IgnoreUpdater;
 import cn.gyw.individual.plugin.codegen.processor.vo.CgVo;
 import cn.gyw.individual.starters.jpa.converter.ValidStatusConverter;
 import cn.gyw.individual.starters.jpa.support.BaseJpaAggregate;
+import lombok.Data;
+
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import lombok.Data;
 
-@CgVo(pkgName = "cn.gyw.backend.system.domain.user.vo")
-@CgCreator(pkgName = "cn.gyw.backend.system.domain.user.creator")
-@CgUpdater(pkgName = "cn.gyw.backend.system.domain.user.updater")
-@CgRepository(pkgName = "cn.gyw.backend.system.domain.user.repository")
-@CgService(pkgName = "cn.gyw.backend.system.domain.user.service")
-@CgServiceImpl(pkgName = "cn.gyw.backend.system.domain.user.service")
-@CgQuery(pkgName = "cn.gyw.backend.system.domain.user.query")
-@CgMapper(pkgName = "cn.gyw.backend.system.domain.user.mapper")
-@CgController(pkgName = "cn.gyw.backend.system.controller")
-@CgCreateRequest(pkgName = "cn.gyw.backend.system.api.request")
-@CgUpdateRequest(pkgName = "cn.gyw.backend.system.api.request")
-@CgQueryRequest(pkgName = "cn.gyw.backend.system.api.request")
-@CgResponse(pkgName = "cn.gyw.backend.system.api.response")
+@CgVo(pkgName = "cn.gyw.backend.order.domain.objectsku.vo")
+@CgCreator(pkgName = "cn.gyw.backend.order.domain.objectsku.creator")
+@CgUpdater(pkgName = "cn.gyw.backend.order.domain.objectsku.updater")
+@CgRepository(pkgName = "cn.gyw.backend.order.domain.objectsku.repository")
+@CgService(pkgName = "cn.gyw.backend.order.domain.objectsku.service")
+@CgServiceImpl(pkgName = "cn.gyw.backend.order.domain.objectsku.service")
+@CgQuery(pkgName = "cn.gyw.backend.order.domain.objectsku.query")
+@CgMapper(pkgName = "cn.gyw.backend.order.domain.objectsku.mapper")
+@CgController(pkgName = "cn.gyw.backend.order.controller")
+@CgCreateRequest(pkgName = "cn.gyw.backend.order.api.request")
+@CgUpdateRequest(pkgName = "cn.gyw.backend.order.api.request")
+@CgQueryRequest(pkgName = "cn.gyw.backend.order.api.request")
+@CgResponse(pkgName = "cn.gyw.backend.order.api.response")
 @Entity
-@Table(name = "user_account")
+@Table(name = "sku_attribute")
 @Data
-public class UserAccount extends BaseJpaAggregate {
+public class SkuAttribute extends BaseJpaAggregate {
 
-    @FieldDesc(name = "用户ID")
-    private Long userId;
+    @FieldDesc(name = "skuId")
+    private Long skuId;
 
-    @FieldDesc(name = "账号")
-    private String accountNo;
+    @FieldDesc(name = "模板项id")
+    private Long itemId;
 
-    @FieldDesc(name = "密码")
-    private String password;
+    @FieldDesc(name = "编码")
+    private String code;
 
-    @FieldDesc(name = "账号类型")
-    @Convert(converter = AccountTypeConverter.class)
-    private AccountType accountType;
+    @FieldDesc(name = "值")
+    private String value;
+
+    @FieldDesc(name = "标签")
+    private String label;
 
     @Convert(converter = ValidStatusConverter.class)
     @IgnoreUpdater
