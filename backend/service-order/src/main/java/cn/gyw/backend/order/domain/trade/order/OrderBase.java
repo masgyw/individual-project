@@ -1,11 +1,15 @@
 package cn.gyw.backend.order.domain.trade.order;
 
+import cn.gyw.backend.order.constant.OrderErrorCode;
+import cn.gyw.backend.order.domain.trade.order.domainservice.model.OrderCompleteModel;
 import cn.gyw.backend.order.domain.trade.order.domainservice.model.OrderCreateModel;
+import cn.gyw.backend.order.domain.trade.order.events.OrderEvents;
 import cn.gyw.individual.commons.converter.AccountTypeConverter;
 import cn.gyw.individual.commons.converter.DictValueListConverter;
 import cn.gyw.individual.commons.converter.PayItemListConverter;
 import cn.gyw.individual.commons.enums.AccountType;
 import cn.gyw.individual.commons.enums.ValidStatus;
+import cn.gyw.individual.commons.exceptions.BusinessException;
 import cn.gyw.individual.commons.model.DictValue;
 import cn.gyw.individual.commons.pay.PayItem;
 import cn.gyw.individual.plugin.codegen.annotations.FieldDesc;
@@ -28,7 +32,9 @@ import cn.gyw.individual.plugin.codegen.processor.updater.IgnoreUpdater;
 import cn.gyw.individual.plugin.codegen.processor.vo.CgVo;
 import cn.gyw.individual.starters.jpa.converter.ValidStatusConverter;
 import cn.gyw.individual.starters.jpa.support.BaseJpaAggregate;
+import com.google.common.collect.Lists;
 import lombok.Data;
+import org.apache.commons.collections.CollectionUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -37,6 +43,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 @CgVo(pkgName = "cn.gyw.backend.order.domain.trade.order.vo")
 @CgCreator(pkgName = "cn.gyw.backend.order.domain.trade.order.creator")
@@ -125,20 +132,63 @@ public class OrderBase extends BaseJpaAggregate {
         setValidStatus(ValidStatus.VALID);
         setInvoiceFlag(ValidStatus.INVALID);
         BigDecimal total = getTotalAmount();
+        if (CollectionUtils.isNotEmpty(createModel.getPayList())) {
+            setPayList(createModel.getPayList());
+            BigDecimal hasPay = payList.stream().map(p -> p.getMoney())
+                    .reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
+            if (hasPay.compareTo(total) > 0) {
+                throw new BusinessException(OrderErrorCode.PAY_TOO_BIG);
+            }
+            if (hasPay.compareTo(total) == 0) {
+                setOrderState(OrderState.PAY_SUCCESS);
+                setWaitPay(BigDecimal.ZERO);
+            } else {
+                setOrderState(OrderState.WAIT_PAY);
+                setWaitPay(total.subtract(hasPay));
+            }
+        } else {
+            setPayList(Lists.newArrayList());
+            if (BigDecimal.ZERO.compareTo(total) == 0) {
+                setOrderState(OrderState.PAY_SUCCESS);
+                setWaitPay(BigDecimal.ZERO);
+            } else {
+                setWaitPay(total);
+                setOrderState(OrderState.WAIT_PAY);
+            }
+        }
+        registerEvent(new OrderEvents.OrderCreateEvent(this, createModel));
     }
 
     /**
      * 订单完成
      */
-    public void complete() {
-
+    public void complete(OrderCompleteModel completeModel) {
+        if (!Objects.equals(OrderState.WAIT_PAY, getOrderState())) {
+            throw new BusinessException(OrderErrorCode.ORDER_NOT_WAIT_PAY);
+        }
+        if (CollectionUtils.isEmpty(completeModel.getPayItemList())) {
+            throw new BusinessException(OrderErrorCode.PAY_LIST_IS_NULL);
+        }
+        BigDecimal hasPay = completeModel.getPayItemList().stream().map(PayItem::getMoney)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (!(hasPay.compareTo(getWaitPay()) == 0)) {
+            throw new BusinessException(OrderErrorCode.PAY_AMOUNT_NOT_EQUAL_WAIT_PAY);
+        }
+        setPayTime(completeModel.getPayTime());
+        List<PayItem> payItemList = getPayList();
+        payItemList.addAll(completeModel.getPayItemList());
+        setPayList(payItemList);
+        setOrderState(OrderState.PAY_SUCCESS);
     }
 
     /**
      * 取消订单
      */
     public void cancel() {
-
+        if (!Objects.equals(OrderState.WAIT_PAY, getOrderState())) {
+            throw new BusinessException(OrderErrorCode.ORDER_NOT_WAIT_PAY);
+        }
+        setOrderState(OrderState.CANCEL);
     }
 
     public void valid() {
