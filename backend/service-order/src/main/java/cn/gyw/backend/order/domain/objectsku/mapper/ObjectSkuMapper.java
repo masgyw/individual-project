@@ -5,6 +5,7 @@ import cn.gyw.backend.order.api.request.ObjectSkuCreateRequest;
 import cn.gyw.backend.order.api.request.ObjectSkuQueryRequest;
 import cn.gyw.backend.order.api.request.ObjectSkuUpdateRequest;
 import cn.gyw.backend.order.api.response.ObjectSkuResponse;
+import cn.gyw.backend.order.converter.OrderMapper;
 import cn.gyw.backend.order.domain.objectsku.ObjectSku;
 import cn.gyw.backend.order.domain.objectsku.creator.ObjectSkuCreator;
 import cn.gyw.backend.order.domain.objectsku.query.ObjectSkuQuery;
@@ -16,28 +17,29 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(
-    uses = {
-        GenericEnumMapper.class,
-        DateMapper.class
-    }
+        uses = {
+                GenericEnumMapper.class,
+                DateMapper.class,
+                OrderMapper.class
+        }
 )
 public interface ObjectSkuMapper {
-  ObjectSkuMapper INSTANCE = Mappers.getMapper(ObjectSkuMapper.class);
+    ObjectSkuMapper INSTANCE = Mappers.getMapper(ObjectSkuMapper.class);
 
-  ObjectSku dtoToEntity(ObjectSkuCreator dto);
+    ObjectSku dtoToEntity(ObjectSkuCreator dto);
 
-  ObjectSkuUpdater request2Updater(ObjectSkuUpdateRequest request);
+    ObjectSkuUpdater request2Updater(ObjectSkuUpdateRequest request);
 
-  ObjectSkuCreator request2Dto(ObjectSkuCreateRequest request);
+    ObjectSkuCreator request2Dto(ObjectSkuCreateRequest request);
 
-  ObjectSkuQuery request2Query(ObjectSkuQueryRequest request);
+    ObjectSkuQuery request2Query(ObjectSkuQueryRequest request);
 
-  ObjectSku queryToEntity(ObjectSkuQuery query);
+    ObjectSku queryToEntity(ObjectSkuQuery query);
 
-  ObjectSkuResponse vo2Response(ObjectSkuVO vo);
+    ObjectSkuResponse vo2Response(ObjectSkuVO vo);
 
-  default ObjectSkuResponse vo2CustomResponse(ObjectSkuVO vo) {
-    ObjectSkuResponse response = vo2Response(vo);
-    return response;
-  }
+    default ObjectSkuResponse vo2CustomResponse(ObjectSkuVO vo) {
+        ObjectSkuResponse response = vo2Response(vo);
+        return response;
+    }
 }

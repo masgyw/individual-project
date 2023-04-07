@@ -7,7 +7,7 @@ import cn.gyw.backend.template.domain.templateitem.InputType;
  * 枚举自定义转化
  * 在实体类中的枚举都要进行配置
  */
-public class CustomMapper {
+public class CustomTemplateMapper {
 
     public Integer type2Int(InputType type) {
         return type.getCode();

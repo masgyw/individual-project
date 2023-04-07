@@ -1,4 +1,4 @@
-package cn.gyw.backend.system.config;
+package cn.gyw.backend.infrastructure.config;
 
 import cn.gyw.platform.configuration.interfaces.IConfiguration;
 import cn.gyw.platform.configuration.service.ConfigurationOnFileYaml;
@@ -10,6 +10,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -26,28 +27,25 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(entityManagerFactoryRef = "systemEntityManagerFactory",
-        transactionManagerRef = "systemTransactionManager",
-        basePackages = {"cn.gyw.backend.system", "cn.gyw.backend.template", "cn.gyw.backend.asset"})
-public class SystemDSConfig {
+@EnableJpaRepositories(entityManagerFactoryRef = "houseEntityManagerFactory",
+        transactionManagerRef = "houseTransactionManager", basePackages = "cn.gyw.backend.house")
+public class HouseDSConfig {
 
-    public static final String[] PACKAGES_TO_SCAN = new String[]{"cn.gyw.backend.system", "cn.gyw.backend.template",
-            "cn.gyw.backend.asset"};
-
-    @Value("${system.datasource.username}")
+    @Value("${house.datasource.username}")
     private String username;
 
-    @Value("${system.datasource.url}")
+    @Value("${house.datasource.url}")
     private String jdbcUrl;
 
-    @Value("${system.datasource.driver-class-name}")
+    @Value("${house.datasource.driver-class-name}")
     private String driverClass;
 
     private IConfiguration config = new ConfigurationOnFileYaml();
 
-    @Bean(name = "systemDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.system")
-    public DataSource systemDataSource() {
+    @Primary
+    @Bean(name = "houseDataSource")
+    @ConfigurationProperties(prefix = "spring.datasource.house")
+    public DataSource houseDataSource() {
         String host = config.getValue("hw-cloud.datasource", "host");
         String pwd = config.getValue("hw-cloud.datasource", "password");
         // 自动选择
@@ -58,21 +56,23 @@ public class SystemDSConfig {
                 .password(pwd)
                 .build();
 
-        ds.setMaximumPoolSize(2);
+        ds.setMaximumPoolSize(50);
         // ds.setMaxLifetime(600000);
         return ds;
     }
 
-    @Bean(name = "systemEntityManagerFactory")
+    @Primary
+    @Bean(name = "houseEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder,
-                                                                       @Qualifier("systemDataSource") DataSource dataSource) {
+                                                                       @Qualifier("houseDataSource") DataSource dataSource) {
         return builder.dataSource(dataSource)
-                .packages(PACKAGES_TO_SCAN)
-                .persistenceUnit("system").build();
+                .packages("cn.gyw.backend.house")
+                .persistenceUnit("house").build();
     }
 
-    @Bean(name = "systemTransactionManager")
-    public PlatformTransactionManager transactionManager(@Qualifier("systemEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
+    @Primary
+    @Bean(name = "houseTransactionManager")
+    public PlatformTransactionManager transactionManager(@Qualifier("houseEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
     }
 }

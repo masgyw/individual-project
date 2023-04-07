@@ -10,7 +10,7 @@ import cn.gyw.backend.template.domain.selectdict.creator.SelectDictCreator;
 import cn.gyw.backend.template.domain.selectdict.query.SelectDictQuery;
 import cn.gyw.backend.template.domain.selectdict.updater.SelectDictUpdater;
 import cn.gyw.backend.template.domain.selectdict.vo.SelectDictVO;
-import cn.gyw.backend.template.mapper.CustomMapper;
+import cn.gyw.backend.template.mapper.CustomTemplateMapper;
 import cn.gyw.individual.commons.mapper.DateMapper;
 import cn.gyw.individual.commons.mapper.GenericEnumMapper;
 import org.mapstruct.Mapper;
@@ -20,7 +20,7 @@ import org.mapstruct.factory.Mappers;
         uses = {
                 GenericEnumMapper.class,
                 DateMapper.class,
-                CustomMapper.class
+                CustomTemplateMapper.class
         }
 )
 public interface SelectDictMapper {
