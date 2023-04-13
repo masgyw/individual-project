@@ -11,9 +11,25 @@ case "`uname`" in
 esac
 BIN_DIR=$bin_abs_path
 DEPLOY_DIR=$BIN_DIR/..
-JAR_NAME='system-center.jar'
-VM_OPTS="-server -Xmx1g -Xms1g -Xmn256m -XX:PermSize=128m -Xss256k -XX:+DisableExplicitGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSCompactAtFullCollection -XX:LargePageSizeInBytes=128m -XX:+UseFastAccessorMethods -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=70"
-APP_NAME="system-center"
+JAR_NAME='app.jar'
+CONF="$DEPLOY_DIR/conf/"
+LOG_PATH="$DEPLOY_DIR/logs"
+
+VM_OPTS="-server \
+-Xmx256m \
+-Xms256m \
+-Xmn256m \
+-XX:MetaspaceSize=128m \
+-Xss256k \
+-XX:+DisableExplicitGC \
+-XX:+UseConcMarkSweepGC \
+-XX:+CMSParallelRemarkEnabled \
+-XX:+UseCMSCompactAtFullCollection \
+-XX:LargePageSizeInBytes=128m \
+-XX:+UseFastAccessorMethods \
+-XX:+UseCMSInitiatingOccupancyOnly \
+-XX:CMSInitiatingOccupancyFraction=70"
+APP_NAME="app"
 JAVA=java
 
 start() {
@@ -21,8 +37,8 @@ start() {
  echo "sleep for stopping"
  sleep 2
  echo "start $APP_NAME "
- echo "exec command : nohup $JAVA $VM_OPTS -jar $DEPLOY_DIR/lib/$JAR_NAME $SPB_OPTS > /dev/null 2>&1 &"
- nohup $JAVA $VM_OPTS -jar $DEPLOY_DIR/lib/$JAR_NAME  > /dev/null 2>&1 &
+ echo "exec command : nohup $JAVA $VM_OPTS -Dloader.path=${DEPLOY_DIR}/libs/,$CONF -Dlocalcfg=true  -jar -Dspring.config.location=$CONF $DEPLOY_DIR/lib/$JAR_NAME  > $LOG_PATH/app.out 2>&1 &"
+ nohup $JAVA $VM_OPTS -Dloader.path=${DEPLOY_DIR}/libs/,$CONF -Dlocalcfg=true  -jar -Dspring.config.location=$CONF $DEPLOY_DIR/lib/$JAR_NAME  > $LOG_PATH/app.out 2>&1 &
  sleep 3
  boot_id=`ps -ef |grep java|grep $APP_NAME|grep -v grep|awk '{print $2}'`
  echo "app started pid = ${boot_id}"

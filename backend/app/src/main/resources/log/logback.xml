@@ -3,7 +3,7 @@
 
   <contextName>backend</contextName>
 
-  <property name="LOG_HOME" value="${user.home}/Temp"/>
+  <property name="LOG_HOME" value="/root/workspace/app/logs"/>
   <property name="APP_NAME" value="backend"/>
   <property name="CONSOLE_LOG_PATTERN"
             value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%15.15thread] %logger{39} [%method.%line] : %msg%n"/>
