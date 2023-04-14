@@ -10,6 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>app</artifactId>
+  <packaging>jar</packaging>
 
   <properties>
     <maven.compiler.source>8</maven.compiler.source>
@@ -180,7 +181,7 @@
         <executions>
           <execution>
             <id>make-assembly</id>
-            <phase>package</phase>
+            <phase>install</phase>
             <goals>
               <goal>single</goal>
             </goals>
@@ -192,6 +193,9 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
           <mainClass>cn.gyw.backend.Application</mainClass>
+          <!-- jvm启动时通过-Dloader.path加载包，必须指定layout为ZIP，否则-Dloader.path无效
+          Main-Class: org.springframework.boot.loader.PropertiesLauncher
+          -->
           <layout>ZIP</layout>
           <includes>
             <include>
@@ -236,18 +240,18 @@
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.0.2</version>
         <configuration>
-          <archive>
-            <!-- 生成的项目JAR包中，不要包含pom.xml和pom.properties这两个文件 -->
-            <addMavenDescriptor>false</addMavenDescriptor>
-            <manifest>
-              <!-- 是否要把第三方依赖的JAR包加入到类构建路径 -->
-              <addClasspath>true</addClasspath>
-              <!-- 外部依赖JAR包的存放路径，为了在MANIFEST.MF文件中指定外部依赖的路径 -->
-              <classpathPrefix>libs/</classpathPrefix>
-              <!-- 项目主启动类 -->
-              <mainClass>cn.gyw.backend.Application</mainClass>
-            </manifest>
-          </archive>
+<!--          <archive>-->
+<!--            &lt;!&ndash; 生成的项目JAR包中，不要包含pom.xml和pom.properties这两个文件 &ndash;&gt;-->
+<!--            <addMavenDescriptor>false</addMavenDescriptor>-->
+<!--            <manifest>-->
+<!--              &lt;!&ndash; 是否要把第三方依赖的JAR包加入到类构建路径 &ndash;&gt;-->
+<!--              <addClasspath>true</addClasspath>-->
+<!--              &lt;!&ndash; 外部依赖JAR包的存放路径，为了在MANIFEST.MF文件中指定外部依赖的路径 &ndash;&gt;-->
+<!--              <classpathPrefix>libs/</classpathPrefix>-->
+<!--              &lt;!&ndash; 项目主启动类 &ndash;&gt;-->
+<!--              <mainClass>cn.gyw.backend.Application</mainClass>-->
+<!--            </manifest>-->
+<!--          </archive>-->
           <excludes>
             <exclude>*.properties</exclude>
           </excludes>

@@ -9,36 +9,47 @@ case "`uname`" in
 		bin_abs_path=`cd $(dirname $0); pwd`
 		;;
 esac
+
 BIN_DIR=$bin_abs_path
 DEPLOY_DIR=$BIN_DIR/..
+APP_NAME="app"
 JAR_NAME='app.jar'
+JAR_PATH="$DEPLOY_DIR/lib/"
 CONF="$DEPLOY_DIR/conf/"
 LOG_PATH="$DEPLOY_DIR/logs"
-
-VM_OPTS="-server \
--Xmx256m \
--Xms256m \
--Xmn256m \
--XX:MetaspaceSize=128m \
--Xss256k \
--XX:+DisableExplicitGC \
--XX:+UseConcMarkSweepGC \
--XX:+CMSParallelRemarkEnabled \
--XX:+UseCMSCompactAtFullCollection \
--XX:LargePageSizeInBytes=128m \
--XX:+UseFastAccessorMethods \
--XX:+UseCMSInitiatingOccupancyOnly \
--XX:CMSInitiatingOccupancyFraction=70"
-APP_NAME="app"
+GC_PATH="$DEPLOY_DIR/logs/gc.log"
 JAVA=java
+JAVA_MEM_OPTS=" -server \
+ -Xmx128m \
+ -Xms128m \
+ -Xmn128m \
+ -XX:MetaspaceSize=128m \
+ -XX:MaxMetaspaceSize=256m \
+ -XX:-OmitStackTraceInFastThrow \
+ -XX:+DisableExplicitGC \
+ -XX:+UseConcMarkSweepGC \
+ -XX:+CMSParallelRemarkEnabled \
+ -XX:+UseCMSCompactAtFullCollection \
+ -Xloggc:$GC_PATH \
+ -XX:+PrintGCDetails \
+ -XX:+PrintGCDateStamps \
+ -XX:+PrintHeapAtGC \
+ -XX:LargePageSizeInBytes=128m \
+ -XX:+UseFastAccessorMethods \
+ -XX:+UseCMSInitiatingOccupancyOnly \
+ -XX:CMSInitiatingOccupancyFraction=70 "
+JAVA_JMX_OPTS=" -Dcom.sun.management.jmxremote.port=9998 \
+ -Dcom.sun.management.jmxremote.ssl=false \
+ -Dcom.sun.management.jmxremote.authenticate=false"
+JAVA_OPTS=" -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true "
 
 start() {
  stop
  echo "sleep for stopping"
  sleep 2
  echo "start $APP_NAME "
- echo "exec command : nohup $JAVA $VM_OPTS -Dloader.path=${DEPLOY_DIR}/libs/,$CONF -Dlocalcfg=true  -jar -Dspring.config.location=$CONF $DEPLOY_DIR/lib/$JAR_NAME  > $LOG_PATH/app.out 2>&1 &"
- nohup $JAVA $VM_OPTS -Dloader.path=${DEPLOY_DIR}/libs/,$CONF -Dlocalcfg=true  -jar -Dspring.config.location=$CONF $DEPLOY_DIR/lib/$JAR_NAME  > $LOG_PATH/app.out 2>&1 &
+ echo "exec command : nohup $JAVA $JAVA_OPTS $JAVA_MEM_OPTS -Dloader.path=${JAR_PATH}/libs/,$CONF -Dlocalcfg=true -DlogPath=${LOG_PATH} -jar -Dspring.config.location=$CONF $DEPLOY_DIR/lib/$JAR_NAME  > $LOG_PATH/app.out 2>&1 &"
+ nohup $JAVA $JAVA_OPTS $JAVA_MEM_OPTS -Dloader.path=${JAR_PATH}/libs/,$CONF -Dlocalcfg=true -DlogPath=${LOG_PATH} -jar -Dspring.config.location=$CONF $DEPLOY_DIR/lib/$JAR_NAME  > $LOG_PATH/app.out 2>&1 &
  sleep 3
  boot_id=`ps -ef |grep java|grep $APP_NAME|grep -v grep|awk '{print $2}'`
  echo "app started pid = ${boot_id}"
@@ -71,7 +82,7 @@ info() {
   echo "=============================info=============================="
   echo "APP_LOCATION: $DEPLOY_DIR/lib/$JAR_NAME"
   echo "APP_NAME: $APP_NAME"
-  echo "VM_OPTS: $VM_OPTS"
+  echo "VM_OPTS: $JAVA_MEM_OPTS"
   echo "SPB_OPTS: $SPB_OPTS"
   echo "=============================info=============================="
 }
