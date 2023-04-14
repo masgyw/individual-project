@@ -167,6 +167,12 @@
           <include>**/*.txt</include>
         </includes>
       </resource>
+      <!-- 额外包 -->
+      <resource>
+        <directory>../../static</directory>
+        <targetPath>static</targetPath>
+        <filtering>false</filtering>
+      </resource>
     </resources>
 
     <plugins>

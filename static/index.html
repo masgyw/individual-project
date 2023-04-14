@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta charset="UTF-8">
+    <!-- 页面不缓存 -->
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <link rel="stylesheet" href="assets/element-ui/index.css">
+</head>
+
+<body>
+    <div id="app">
+        <router-view :key="$route.path"></router-view>
+    </div>
+</body>
+<script src="assets/js/chart.min.js"></script>
+<!-- axios -->
+<script src="assets/js/axios-1.2.2.min.js"></script>
+<!-- vue.js -->
+<script src="assets/js/vue-3.2.36.js" type="text/javascript"></script>
+<script src="assets/js/vue-router-4.0.10.js" type="text/javascript"></script>
+<script src="assets/js/vuex-4.0.2.global.js" type="text/javascript"></script>
+
+<script src="assets/js/vue3-sfc-loader.js" type="text/javascript"></script>
+<!-- element-ui -->
+<script src="assets/element-ui/index.js"></script>
+<script src="assets/element-ui/icons-vue.min.js"></script>
+<script nomodule>
+    console.info(`Your browser doesn't support native JavaScript modules.`);
+</script>
+<!-- 自定义js -->
+<script src="index.js" type="text/javascript"></script>
+
+</html>
