@@ -42,7 +42,7 @@ export default {
     // console.log(help)
   },
   mounted() {
-    axios.get("https://img-home.csdnimg.cn/data_json/toolbar/toolbar0812.json")
+    axios.get("/datafile/v1", {headers: {"token":"1111"}})
       .then((response) => {
         console.log(response);
       }).catch((err) => {

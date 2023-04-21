@@ -68,3 +68,4 @@ cn:
       urls:
         un-auth-urls:
           - /v3/api-docs/**
+          - /**/*.vue

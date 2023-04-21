@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class DataFileController {
     private IHouseService houseService;
 
     @GetMapping("")
-    public List<DataFileResponse> queryDataFile(String startDate, String endDate) {
+    public List<DataFileResponse> queryDataFile(@NotNull String startDate, @NotNull String endDate) {
         log.info("查询数据文件列表，日期：{}-{}", startDate, endDate);
         // 文件列表
         Set<String> fileSet = dataFileService.getFileNameList(startDate, endDate);

@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @date 2023/3/30
@@ -23,10 +26,20 @@ import java.util.Date;
 @Component
 public class ApiFilter extends OncePerRequestFilter {
 
+    private static final Set<String> EXCLUDE_SUFFIX = Stream.of(".js", ".css", ".ico", ".vue")
+            .collect(Collectors.toSet());
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        String reqUrl = request.getRequestURL().toString();
+        boolean match = EXCLUDE_SUFFIX.stream().anyMatch(reqUrl::endsWith);
+        if (match) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         long startTime = System.currentTimeMillis();
 
         ContentCachingRequestWrapper wrappedRequest;
@@ -50,7 +63,7 @@ public class ApiFilter extends OncePerRequestFilter {
         apiLog.setSequenceNum(SequenceUtil.getPipelineNumbers());
         handleRequest(wrappedRequest, apiLog);
         handleResponse(wrappedResponse, apiLog);
-        log.info("{},cost:{}ms", apiLog, (System.currentTimeMillis() - startTime));
+        log.debug("{},cost:{}ms", apiLog, (System.currentTimeMillis() - startTime));
 
         // 注意这一行代码一定要调用，不然无法返回响应体
         wrappedResponse.copyBodyToResponse();
