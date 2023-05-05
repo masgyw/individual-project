@@ -1,7 +1,6 @@
 house:
   dir:
-    storage: /Users/guanyw/Temp/web-crawler
-    backup: /
+    storage: e:/Temp/python/
   datasource:
     username: root
     password:

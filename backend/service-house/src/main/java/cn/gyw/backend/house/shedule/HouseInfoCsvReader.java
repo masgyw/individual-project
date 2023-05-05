@@ -1,8 +1,9 @@
 package cn.gyw.backend.house.shedule;
 
-import cn.gyw.backend.house.domain.house.service.DataFileService;
+import cn.gyw.backend.house.config.HouseProperties;
 import cn.gyw.backend.house.domain.house.creator.HouseCreator;
 import cn.gyw.backend.house.domain.house.query.HouseQuery;
+import cn.gyw.backend.house.domain.house.service.DataFileService;
 import cn.gyw.backend.house.domain.house.service.IHouseService;
 import cn.gyw.backend.house.domain.house.vo.HouseVO;
 import cn.gyw.backend.house.enums.HouseTypeEnum;
@@ -15,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
@@ -40,15 +40,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Component
 public class HouseInfoCsvReader {
-    /**
-     * 数据文件存储目录
-     */
-    @Value("${house.dir.storage}")
-    private String csvStorageDir;
-    @Value("${house.dir.backup}")
-    private String csvBackupDir;
 
     private final Map<String, Field> creatorFieldMap = new ConcurrentHashMap<>();
+
+    private HouseProperties houseProperties;
 
     private IHouseService houseInfoService;
 
@@ -105,14 +100,14 @@ public class HouseInfoCsvReader {
             // 4. 文件处理成功后，移动文件到已处理目录
             if (isSuccess) {
                 // 5. 备份源数据文件
-                // backupDataSourceFile(file.toPath());
+                backupDataSourceFile(file.toPath());
             }
         }
         return isSuccess;
     }
 
     private void backupDataSourceFile(Path srcPath) {
-        Path backupDir = Paths.get(csvBackupDir);
+        Path backupDir = Paths.get(houseProperties.getBackupDir());
         // 目标目录是否存在
         if (!Files.exists(backupDir, LinkOption.NOFOLLOW_LINKS)) {
             try {
@@ -225,6 +220,11 @@ public class HouseInfoCsvReader {
         wrapper.setBean(houseQuery);
         Page<HouseVO> voPage = houseInfoService.findByPage(wrapper);
         return voPage.hasContent();
+    }
+
+    @Autowired
+    public void setHouseProperties(HouseProperties houseProperties) {
+        this.houseProperties = houseProperties;
     }
 
     @Autowired

@@ -31,7 +31,7 @@
       <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
         <maxFileSize>100MB</maxFileSize>
       </timeBasedFileNamingAndTriggeringPolicy>
-      <maxHistory>15</maxHistory>
+      <maxHistory>1</maxHistory>
     </rollingPolicy>
     <!-- 记录debug 级别以上的日志 -->
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -72,7 +72,7 @@
         <maxFileSize>100MB</maxFileSize>
       </timeBasedFileNamingAndTriggeringPolicy>
       <!--日志文件保留天数-->
-      <maxHistory>15</maxHistory>
+      <maxHistory>1</maxHistory>
     </rollingPolicy>
     <!-- 此日志文件只记录ERROR级别的 -->
     <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -110,24 +110,29 @@
   <logger name="cn.gyw.backend" level="info" additivity="false">
     <appender-ref ref="API_FILE"/>
   </logger>
-  <logger name="cn.gyw.backend" level="debug" additivity="false">
-    <appender-ref ref="CONSOLE"/>
+  <logger name="cn.gyw.backend" level="info" additivity="false">
     <appender-ref ref="APP_FILE"/>
   </logger>
 
   <logger name="org.hibernate" level="info" additivity="false"/>
-  <logger name="org.springframework.web" level="debug" additivity="false"/>
-  <!-- SQL 日志打印 -->
-  <logger name="org.hibernate.SQL" level="debug" additivity="false"/>
-  <logger name="org.hibernate.engine.QueryParameters" level="debug" additivity="false"/>
-  <logger name="org.hibernate.engine.query.HQLQueryPlan" level="debug" additivity="false"/>
-  <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace" additivity="false"/>
-  <logger name="org.springframework.orm.jpa" level="debug" additivity="false"/>
-  <logger name="org.springframework.transaction" level="debug" additivity="false"/>
 
   <springProfile name="dev,test">
+    <logger name="org.springframework.web" level="debug" additivity="false"/>
+    <!-- SQL 日志打印 -->
+    <logger name="org.hibernate.SQL" level="debug" additivity="false"/>
+    <logger name="org.hibernate.engine.QueryParameters" level="debug" additivity="false"/>
+    <logger name="org.hibernate.engine.query.HQLQueryPlan" level="debug" additivity="false"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace" additivity="false"/>
+    <logger name="org.springframework.orm.jpa" level="debug" additivity="false"/>
+    <logger name="org.springframework.transaction" level="debug" additivity="false"/>
     <root level="info">
       <appender-ref ref="CONSOLE"/>
+    </root>
+  </springProfile>
+
+  <springProfile name="cloud">
+    <root level="info">
+      <appender-ref ref="APP_FILE"/>
     </root>
   </springProfile>
 

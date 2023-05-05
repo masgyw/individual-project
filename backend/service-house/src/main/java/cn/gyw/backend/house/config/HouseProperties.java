@@ -16,4 +16,11 @@ public class HouseProperties {
     // CSV 数据文件存储目录
     @Value("${house.dir.storage}")
     private String storageDir;
+
+    /**
+     * 获取备份目录
+     */
+    public String getBackupDir() {
+        return (storageDir + "/backup").replaceAll("/+", "/");
+    }
 }
