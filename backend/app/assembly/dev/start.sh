@@ -12,8 +12,8 @@ esac
 
 BIN_DIR=$bin_abs_path
 DEPLOY_DIR=$BIN_DIR/..
-APP_NAME="app"
-JAR_NAME='app.jar'
+APP_NAME="backend"
+JAR_NAME='backend.jar'
 JAR_PATH="$DEPLOY_DIR/lib/"
 CONF="$DEPLOY_DIR/conf/"
 LOG_PATH="$DEPLOY_DIR/logs"
@@ -48,8 +48,8 @@ start() {
  echo "sleep for stopping"
  sleep 2
  echo "start $APP_NAME "
- echo "exec command : nohup $JAVA $JAVA_OPTS $JAVA_MEM_OPTS -Dloader.path=${JAR_PATH}/libs/,$CONF -Dlocalcfg=true -DlogPath=${LOG_PATH} -jar -Dspring.config.location=$CONF $DEPLOY_DIR/lib/$JAR_NAME  > $LOG_PATH/app.out 2>&1 &"
- nohup $JAVA $JAVA_OPTS $JAVA_MEM_OPTS -Dloader.path=${JAR_PATH}/libs/,$CONF -Dlocalcfg=true -DlogPath=${LOG_PATH} -jar -Dspring.config.location=$CONF $DEPLOY_DIR/lib/$JAR_NAME  > $LOG_PATH/app.out 2>&1 &
+ echo "exec command : nohup $JAVA $JAVA_OPTS $JAVA_MEM_OPTS -Dloader.path=${JAR_PATH}/libs/,$CONF -Dlocalcfg=true -DlogPath=${LOG_PATH} -jar -Dspring.config.location=$CONF $DEPLOY_DIR/lib/$JAR_NAME  > $LOG_PATH/$APP_NAME.out 2>&1 &"
+ nohup $JAVA $JAVA_OPTS $JAVA_MEM_OPTS -Dloader.path=${JAR_PATH}/libs/,$CONF -Dlocalcfg=true -DlogPath=${LOG_PATH} -jar -Dspring.config.location=$CONF $DEPLOY_DIR/lib/$JAR_NAME  > $LOG_PATH/$APP_NAME.out 2>&1 &
  sleep 3
  boot_id=`ps -ef |grep java|grep $APP_NAME|grep -v grep|awk '{print $2}'`
  echo "app started pid = ${boot_id}"

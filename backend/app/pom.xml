@@ -79,35 +79,35 @@
       <scope>test</scope>
     </dependency>
 
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.cloud</groupId>-->
-<!--      <artifactId>spring-cloud-starter-bootstrap</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>com.alibaba.cloud</groupId>-->
-<!--      <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
-<!--      <exclusions>-->
-<!--        <exclusion>-->
-<!--          <groupId>com.alibaba.nacos</groupId>-->
-<!--          <artifactId>nacos-client</artifactId>-->
-<!--        </exclusion>-->
-<!--      </exclusions>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>com.alibaba.cloud</groupId>-->
-<!--      <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>-->
-<!--      <exclusions>-->
-<!--        <exclusion>-->
-<!--          <groupId>com.alibaba.nacos</groupId>-->
-<!--          <artifactId>nacos-client</artifactId>-->
-<!--        </exclusion>-->
-<!--      </exclusions>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>com.alibaba.nacos</groupId>-->
-<!--      <artifactId>nacos-client</artifactId>-->
-<!--      <version>1.4.3</version>-->
-<!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.springframework.cloud</groupId>-->
+    <!--      <artifactId>spring-cloud-starter-bootstrap</artifactId>-->
+    <!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>com.alibaba.cloud</groupId>-->
+    <!--      <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
+    <!--      <exclusions>-->
+    <!--        <exclusion>-->
+    <!--          <groupId>com.alibaba.nacos</groupId>-->
+    <!--          <artifactId>nacos-client</artifactId>-->
+    <!--        </exclusion>-->
+    <!--      </exclusions>-->
+    <!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>com.alibaba.cloud</groupId>-->
+    <!--      <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>-->
+    <!--      <exclusions>-->
+    <!--        <exclusion>-->
+    <!--          <groupId>com.alibaba.nacos</groupId>-->
+    <!--          <artifactId>nacos-client</artifactId>-->
+    <!--        </exclusion>-->
+    <!--      </exclusions>-->
+    <!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>com.alibaba.nacos</groupId>-->
+    <!--      <artifactId>nacos-client</artifactId>-->
+    <!--      <version>1.4.3</version>-->
+    <!--    </dependency>-->
 
   </dependencies>
 
@@ -127,24 +127,6 @@
             <configuration>
               <descriptors>
                 <descriptor>${basedir}/assembly/dev.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>pro</id>
-      <properties>
-        <profiles.active>pro</profiles.active>
-      </properties>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <configuration>
-              <descriptors>
-                <descriptor>${basedir}/assembly/pro.xml</descriptor>
               </descriptors>
             </configuration>
           </plugin>
@@ -177,24 +159,6 @@
 
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <appendAssemblyId>false</appendAssemblyId>
-          <finalName>${project.artifactId}</finalName>
-          <outputDirectory>${project.basedir}/target</outputDirectory>
-        </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id>
-            <phase>install</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
@@ -209,6 +173,7 @@
               <artifactId>nothing</artifactId>
             </include>
           </includes>
+          <outputDirectory>${project.build.directory}/${project.build.finalName}/lib</outputDirectory>
         </configuration>
         <executions>
           <execution>
@@ -218,6 +183,7 @@
           </execution>
         </executions>
       </plugin>
+      <!-- 依赖包插件 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -231,7 +197,7 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/lib/libs</outputDirectory>
+              <outputDirectory>${project.build.directory}/${project.build.finalName}/lib/libs</outputDirectory>
               <overWriteReleases>false</overWriteReleases>
               <overWriteSnapshots>false</overWriteSnapshots>
               <overWriteIfNewer>true</overWriteIfNewer>
@@ -241,27 +207,109 @@
           </execution>
         </executions>
       </plugin>
+      <!-- jar打包插件 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.0.2</version>
         <configuration>
-<!--          <archive>-->
-<!--            &lt;!&ndash; 生成的项目JAR包中，不要包含pom.xml和pom.properties这两个文件 &ndash;&gt;-->
-<!--            <addMavenDescriptor>false</addMavenDescriptor>-->
-<!--            <manifest>-->
-<!--              &lt;!&ndash; 是否要把第三方依赖的JAR包加入到类构建路径 &ndash;&gt;-->
-<!--              <addClasspath>true</addClasspath>-->
-<!--              &lt;!&ndash; 外部依赖JAR包的存放路径，为了在MANIFEST.MF文件中指定外部依赖的路径 &ndash;&gt;-->
-<!--              <classpathPrefix>libs/</classpathPrefix>-->
-<!--              &lt;!&ndash; 项目主启动类 &ndash;&gt;-->
-<!--              <mainClass>cn.gyw.backend.Application</mainClass>-->
-<!--            </manifest>-->
-<!--          </archive>-->
+          <!--          <archive>-->
+          <!--            &lt;!&ndash; 生成的项目JAR包中，不要包含pom.xml和pom.properties这两个文件 &ndash;&gt;-->
+          <!--            <addMavenDescriptor>false</addMavenDescriptor>-->
+          <!--            <manifest>-->
+          <!--              &lt;!&ndash; 是否要把第三方依赖的JAR包加入到类构建路径 &ndash;&gt;-->
+          <!--              <addClasspath>true</addClasspath>-->
+          <!--              &lt;!&ndash; 外部依赖JAR包的存放路径，为了在MANIFEST.MF文件中指定外部依赖的路径 &ndash;&gt;-->
+          <!--              <classpathPrefix>libs/</classpathPrefix>-->
+          <!--              &lt;!&ndash; 项目主启动类 &ndash;&gt;-->
+          <!--              <mainClass>cn.gyw.backend.Application</mainClass>-->
+          <!--            </manifest>-->
+          <!--          </archive>-->
           <excludes>
             <exclude>*.properties</exclude>
           </excludes>
         </configuration>
+      </plugin>
+      <!-- 资源文件处理插件 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <!-- 执行节点 -->
+            <phase>package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/${project.build.finalName}/conf</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/src/main/resources</directory>
+                  <includes>
+                    <include>**/*.yml</include>
+                    <include>**/*.properties</include>
+                  </includes>
+                </resource>
+                <resource>
+                  <directory>${project.basedir}/../service-asset/src/main/resources</directory>
+                  <includes>
+                    <include>**/*.yml</include>
+                    <include>**/*.properties</include>
+                  </includes>
+                </resource>
+                <resource>
+                  <directory>${project.basedir}/../service-house/src/main/resources</directory>
+                  <includes>
+                    <include>**/*.yml</include>
+                    <include>**/*.properties</include>
+                  </includes>
+                </resource>
+                <resource>
+                  <directory>${project.basedir}/../service-order/src/main/resources</directory>
+                  <includes>
+                    <include>**/*.yml</include>
+                    <include>**/*.properties</include>
+                  </includes>
+                </resource>
+                <resource>
+                  <directory>${project.basedir}/../service-system/src/main/resources</directory>
+                  <includes>
+                    <include>**/*.yml</include>
+                    <include>**/*.properties</include>
+                  </includes>
+                </resource>
+                <resource>
+                  <directory>${project.basedir}/../service-template/src/main/resources</directory>
+                  <includes>
+                    <include>**/*.yml</include>
+                    <include>**/*.properties</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- 打包插件，暂时和springboot插件无法公用 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <appendAssemblyId>false</appendAssemblyId>
+          <finalName>backend</finalName>
+          <outputDirectory>${project.basedir}/target</outputDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
