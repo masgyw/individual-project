@@ -176,13 +176,15 @@ const routes = [
 ]
 
 const router = VueRouter.createRouter({
+    // hash mode url 会添加 /#/xxx
+    history: VueRouter.createWebHashHistory(),
     // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
-    history: VueRouter.createWebHistory(),
+    // history: VueRouter.createWebHistory(),
     routes, // short for `routes: routes`
 })
 
 router.beforeEach((to, from, next) => {
-    console.log('router beforeEach:{}-{}', from, to)
+    // console.log('router beforeEach:{}-{}', from, to)
     // For read current uri after each redirect
     if (to.matched.some(record => record.meta.reuse === false)) {
         app.key = to.path
@@ -193,7 +195,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach((to, from) => {
-    console.log('router afterEach:{}-{}', from, to)
+    // console.log('router afterEach:{}-{}', from, to)
     // To close sidepanel after navigatiokn
     let closePanelBtn = document.getElementById("sidepanel-close")
     if ((closePanelBtn) && (to.path !== from.path)) {
