@@ -4,6 +4,8 @@ package cn.gyw.backend.system.controller;
 import cn.gyw.backend.system.api.request.AdminUserCreateRequest;
 import cn.gyw.backend.system.api.request.AdminUserQueryRequest;
 import cn.gyw.backend.system.api.request.AdminUserUpdateRequest;
+import cn.gyw.backend.system.api.request.UserLoginParam;
+import cn.gyw.backend.system.api.response.AdminUserResponse;
 import cn.gyw.backend.system.domain.admin.creator.AdminUserCreator;
 import cn.gyw.backend.system.domain.admin.mapper.AdminUserMapper;
 import cn.gyw.backend.system.domain.admin.query.AdminUserQuery;
@@ -17,7 +19,11 @@ import cn.gyw.individual.commons.model.PageRequestWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -25,6 +31,30 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AdminUserController {
     private final IAdminUserService adminUserService;
+
+    // /**
+    //  * 用户注册
+    //  *
+    //  * @param adminDto
+    //  * @return
+    //  */
+    // @PostMapping(value = "/register")
+    // public BaseResponse register(@Validated @RequestBody AdminDto adminDto) {
+    //     Admin umsAdmin = adminService.register(adminDto);
+    //     if (umsAdmin == null) {
+    //         return BaseResponse.error(SystemRespEnum.REGISTER_FAILED);
+    //     }
+    //     return DataResponse.success(umsAdmin);
+    // }
+
+    @PostMapping(value = "/login")
+    public DataResponse<Map<String, String>> login(@Validated @RequestBody UserLoginParam userLoginParam) {
+        String token = adminUserService.login(userLoginParam.getUsername(), userLoginParam.getPassword());
+        CodeEnum.TokenIllegal.assertNotNull(token);
+        Map<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token", token);
+        return DataResponse.success(tokenMap);
+    }
 
     /**
      * createRequest

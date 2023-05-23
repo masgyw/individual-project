@@ -10,6 +10,9 @@ module.exports = {
         return {
             who: 'world'
         }
+    },
+    mounted() {
+        
     }
 }
 </script>

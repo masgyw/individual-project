@@ -11,7 +11,7 @@ export default {
     },
     components: {},
     mounted() {
-        console.log('this is footer')
+
     },
     methods: {
         

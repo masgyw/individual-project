@@ -28,6 +28,7 @@ public enum CodeEnum implements BaseEnum<CodeEnum>, BusinessExceptionAssert {
     ParamNull(100012, "参数为空"),
     NoData(100014, "数据不存在"),
     TokenIllegal(100015, "token非法"),
+    LoginFailed(100016, "登陆失败"),
 
     ;
 

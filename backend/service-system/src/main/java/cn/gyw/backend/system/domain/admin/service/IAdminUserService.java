@@ -6,37 +6,47 @@ import cn.gyw.backend.system.domain.admin.query.AdminUserQuery;
 import cn.gyw.backend.system.domain.admin.updater.AdminUserUpdater;
 import cn.gyw.backend.system.domain.admin.vo.AdminUserVO;
 import cn.gyw.individual.commons.model.PageRequestWrapper;
+
 import java.lang.Long;
+
 import org.springframework.data.domain.Page;
 
 public interface IAdminUserService {
-  /**
-   * create
-   */
-  Long createAdminUser(AdminUserCreator creator);
+    /**
+     * create
+     */
+    Long createAdminUser(AdminUserCreator creator);
 
-  /**
-   * update
-   */
-  void updateAdminUser(AdminUserUpdater updater);
+    /**
+     * update
+     */
+    void updateAdminUser(AdminUserUpdater updater);
 
-  /**
-   * valid
-   */
-  void validAdminUser(Long id);
+    /**
+     * valid
+     */
+    void validAdminUser(Long id);
 
-  /**
-   * invalid
-   */
-  void invalidAdminUser(Long id);
+    /**
+     * invalid
+     */
+    void invalidAdminUser(Long id);
 
-  /**
-   * findById
-   */
-  AdminUserVO findById(Long id);
+    /**
+     * findById
+     */
+    AdminUserVO findById(Long id);
 
-  /**
-   * findByPage
-   */
-  Page<AdminUserVO> findByPage(PageRequestWrapper<AdminUserQuery> query);
+    /**
+     * findByPage
+     */
+    Page<AdminUserVO> findByPage(PageRequestWrapper<AdminUserQuery> query);
+
+    /**
+     * 登陆
+     * @param username
+     * @param password
+     * @return
+     */
+    String login(String username, String password);
 }
