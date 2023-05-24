@@ -76,7 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     public AdminPasswordLoginProcessFilter adminPassFilter() {
-        return new AdminPasswordLoginProcessFilter(failureHandler, successHandler);
+        return new AdminPasswordLoginProcessFilter(authenticationManager, failureHandler, successHandler);
     }
 
     public AdminSmsLoginProcessFilter smsFilter() {

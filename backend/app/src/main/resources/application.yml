@@ -29,6 +29,8 @@ spring:
         physical_naming_strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
   profiles:
     active: dev,house,system
+  main:
+    allow-bean-definition-overriding: true
 # 日志配置
 logging:
   config: classpath:log/logback-config.xml
@@ -66,7 +68,7 @@ cn:
     log:
       path: /Users/guanyw/Temp/logs
     security:
-      enable: true
+      enable: false
       urls:
         un-auth-urls:
           - /v3/api-docs/**

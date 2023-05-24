@@ -35,9 +35,11 @@ public class AdminPasswordLoginProcessFilter extends AbstractAuthenticationProce
 
     private final CustomAuthenticationSuccessHandler successHandler;
 
-    public AdminPasswordLoginProcessFilter(CustomAuthenticationFailureHandler failureHandler,
+    public AdminPasswordLoginProcessFilter(AuthenticationManager authenticationManager,
+                                           CustomAuthenticationFailureHandler failureHandler,
                                            CustomAuthenticationSuccessHandler successHandler) {
         super(AuthUrlEnum.ADMIN_PASS.getUrl());
+        setAuthenticationManager(authenticationManager);
         this.failureHandler = failureHandler;
         this.successHandler = successHandler;
     }
