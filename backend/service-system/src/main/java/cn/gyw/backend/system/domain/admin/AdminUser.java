@@ -70,8 +70,9 @@ public class AdminUser extends BaseJpaAggregate {
     @IgnoreCreator
     private ValidStatus validStatus;
 
-    public void init() {
+    public void init(String encodePwd) {
         setValidStatus(ValidStatus.VALID);
+        setPassword(encodePwd);
     }
 
     public void valid() {

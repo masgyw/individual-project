@@ -12,28 +12,15 @@ import cn.gyw.individual.commons.enums.CodeEnum;
 import cn.gyw.individual.commons.exceptions.BusinessException;
 import cn.gyw.individual.commons.model.PageRequestWrapper;
 import cn.gyw.individual.starters.jpa.support.EntityOperations;
-
-import java.lang.Long;
-import java.lang.Override;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.data.domain.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.naming.AuthenticationException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -47,9 +34,11 @@ public class AdminUserServiceImpl implements IAdminUserService {
      */
     @Override
     public Long createAdminUser(AdminUserCreator creator) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodePwd = encoder.encode(creator.getPassword());
         Optional<AdminUser> adminUser = EntityOperations.doCreate(adminUserRepository)
                 .create(() -> AdminUserMapper.INSTANCE.dtoToEntity(creator))
-                .update(e -> e.init())
+                .update(e -> e.init(encodePwd))
                 .execute();
         return adminUser.isPresent() ? adminUser.get().getId() : 0;
     }
