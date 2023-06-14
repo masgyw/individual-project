@@ -53,6 +53,11 @@
       <artifactId>service-order</artifactId>
       <version>1.0.0</version>
     </dependency>
+    <dependency>
+      <groupId>cn.gyw.individual</groupId>
+      <artifactId>service-message</artifactId>
+      <version>1.0.0</version>
+    </dependency>
     <!-- knife4j -->
     <dependency>
       <groupId>com.github.xiaoymin</groupId>
