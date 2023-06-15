@@ -1,15 +1,15 @@
-package cn.gyw.backend.message.domain.smssendrecord;
+package cn.gyw.backend.message.domain.messagerecord;
 
 import cn.gyw.individual.commons.enums.BaseEnum;
 
 import java.util.Optional;
 
-public enum SmsType implements BaseEnum<SmsType> {
+public enum MsgTypeEnum implements BaseEnum<MsgTypeEnum> {
 
-    LOGIN(1, "登录"),
-    FIND_PASS(2, "找回密码");
+    VERIFY(1, "验证码"),
+    NOTICE(2, "通知");
 
-    SmsType(Integer code, String name) {
+    MsgTypeEnum(Integer code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -27,8 +27,8 @@ public enum SmsType implements BaseEnum<SmsType> {
         return this.name;
     }
 
-    public static Optional<SmsType> of(Integer code) {
-        return Optional.ofNullable(BaseEnum.parseByCode(SmsType.class, code));
+    public static Optional<MsgTypeEnum> of(Integer code) {
+        return Optional.ofNullable(BaseEnum.parseByCode(MsgTypeEnum.class, code));
     }
 
 }
