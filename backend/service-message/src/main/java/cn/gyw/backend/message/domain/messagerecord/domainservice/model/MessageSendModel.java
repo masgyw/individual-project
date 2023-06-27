@@ -1,4 +1,4 @@
-package cn.gyw.backend.message.domain.dingrobot.model;
+package cn.gyw.backend.message.domain.messagerecord.domainservice.model;
 
 import java.util.Map;
 

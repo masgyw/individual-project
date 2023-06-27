@@ -22,7 +22,6 @@ import cn.gyw.individual.starters.jpa.support.BaseJpaAggregate;
 import cn.gyw.individual.starters.jpa.converter.ValidStatusConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import sun.jvm.hotspot.debugger.cdbg.TemplateType;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;

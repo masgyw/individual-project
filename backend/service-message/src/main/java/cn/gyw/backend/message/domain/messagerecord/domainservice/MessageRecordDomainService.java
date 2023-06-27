@@ -1,6 +1,6 @@
-package cn.gyw.backend.message.domain.dingrobot;
+package cn.gyw.backend.message.domain.messagerecord.domainservice;
 
-import cn.gyw.backend.message.domain.dingrobot.model.MessageSendModel;
+import cn.gyw.backend.message.domain.messagerecord.domainservice.model.MessageSendModel;
 
 public interface MessageRecordDomainService {
 
