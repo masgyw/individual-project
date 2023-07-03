@@ -1,12 +1,18 @@
 <template>
   <div class="aside">
     <el-scrollbar class="scrollbar-wrapper">
-      <el-menu router :default-active="nowActive" class="el-menu-vertical-demo">
-        <el-menu-item v-for="item in filterRouter" :key="item.path" :item="item" :index="item.path">
+      <el-menu
+        :default-active="activeMenu"
+        :collapse="isCollapse"
+        :unique-opened="false"
+        :collapse-transition="false"
+        mode="vertical"
+      >
+        <el-menu-item v-for="item in routes" :key="item.path" :item="item" :index="item.path">
           <el-icon><Document /></el-icon>
-          <template #title>
+
             <span>{{ item.meta.title }}</span>
-          </template>
+
         </el-menu-item>
       </el-menu>
     </el-scrollbar>
@@ -25,6 +31,24 @@ module.exports = {
         {path: '/house', meta: { icon: '', title: '房屋数据' }},
         {path: '/data-file', meta: { icon: '', title: '数据文件' }},
       ]
+    }
+  },
+  computed: {
+    routes() {
+      console.log("", this.$router.options.routes)
+      return this.$router.options.routes
+    },
+    activeMenu() {
+      const route = this.$route
+      const { meta, path } = route
+      // if set path, the sidebar will highlight the path you set
+      if (meta.activeMenu) {
+        return meta.activeMenu
+      }
+      return path
+    },
+    isCollapse() {
+      return false;
     }
   }
 }

@@ -41,7 +41,7 @@ public class MessageRecordServiceImpl implements MessageRecordService {
   public Long createMessageRecord(MessageRecordCreator creator) {
     Optional<MessageRecord> messageRecord = EntityOperations.doCreate(messageRecordRepository)
     .create(() -> MessageRecordMapper.INSTANCE.dtoToEntity(creator))
-    .update(e -> e.init())
+    .update(e -> e.init("ss"))
     .execute();
     return messageRecord.isPresent() ? messageRecord.get().getId() : 0;
   }

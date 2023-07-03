@@ -25,16 +25,96 @@ const routes = [
             },
         ]
     },
-    // , {
-    //     name: 'settings',
-    //     path: '/settings',
-    //     component: Vue.defineAsyncComponent(() => loadModule('./pages/app-settings.vue', OPTIONS)),
-    //     beforeEnter: [canUserAccess, tokenValid],
-    // }, 
+    {
+        path: '/permission',
+        component: Vue.defineAsyncComponent(() => loadModule('./layout/layout.vue', OPTIONS)),
+        redirect: '/permission/list',
+        name: '权限管理',
+        meta: {
+            title: '权限管理',
+            icon: 'form'
+        },
+        children: [
+            {
+                path: 'list',
+                name: '资源列表',
+                component: Vue.defineAsyncComponent(() => loadModule('./views/house/house.vue', OPTIONS)),
+                meta: { title: '资源列表', icon: 'form' }
+            },
+            {
+                path: 'add',
+                name: '资源添加',
+                component: Vue.defineAsyncComponent(() => loadModule('./views/house/house.vue', OPTIONS)),
+                meta: { title: '资源添加', icon: 'form' }
+            },
+            {
+                path: 'update',
+                name: '资源修改',
+                component: Vue.defineAsyncComponent(() => loadModule('./views/house/house.vue', OPTIONS)),
+                meta: { title: '资源修改', icon: 'form' },
+                hidden: true
+            },
+            {
+                path: 'roleList',
+                name: '角色管理',
+                component: Vue.defineAsyncComponent(() => loadModule('./views/house/house.vue', OPTIONS)),
+                meta: { title: '角色管理', icon: 'form' }
+            },
+            {
+                path: 'platformList',
+                name: '平台管理',
+                component: Vue.defineAsyncComponent(() => loadModule('./views/house/house.vue', OPTIONS)),
+                meta: { title: '平台管理', icon: 'form' }
+            },
+            {
+                path: 'userList',
+                name: '后台用户列表',
+                component: Vue.defineAsyncComponent(() => loadModule('./views/house/house.vue', OPTIONS)),
+                meta: { title: '后台用户列表', icon: 'form' }
+            }
+        ]
+    },
+    {
+        path: '/template',
+        component: Vue.defineAsyncComponent(() => loadModule('./layout/layout.vue', OPTIONS)),
+        redirect: '/template/template',
+        name: '模板管理',
+        meta: {
+            title: '模板管理',
+            icon: 'form'
+        },
+        children: [
+            {
+                path: 'templateCategory',
+                name: '模板类别',
+                component: Vue.defineAsyncComponent(() => loadModule('./views/house/house.vue', OPTIONS)),
+                meta: { title: '模板类别', icon: 'form' }
+            },
+            {
+                path: 'template',
+                name: '模板管理',
+                component: Vue.defineAsyncComponent(() => loadModule('./views/house/house.vue', OPTIONS)),
+                meta: { title: '模板管理', icon: 'form' }
+            },
+            {
+                path: 'templateItem',
+                name: '模板项管理',
+                component: Vue.defineAsyncComponent(() => loadModule('./views/house/house.vue', OPTIONS)),
+                meta: { title: '模板项管理', icon: 'form' }
+            },
+            {
+                path: 'selectDict',
+                name: '下拉字典管理',
+                component: Vue.defineAsyncComponent(() => loadModule('./views/house/house.vue', OPTIONS)),
+                meta: { title: '下拉字典管理', icon: 'form' }
+            }
+        ]
+    },
     {
         name: 'login',
         path: '/login',
-        component: Vue.defineAsyncComponent(() => loadModule('./views/app-login.vue', OPTIONS))
+        component: Vue.defineAsyncComponent(() => loadModule('./views/app-login.vue', OPTIONS)),
+        meta: { title: '登录', icon: 'form' }
     }, 
     // {
     //     name: 'signup',
@@ -48,7 +128,8 @@ const routes = [
     {
         name: '404',
         path: '/:pathMatch(.*)',
-        component: Vue.defineAsyncComponent(() => loadModule('./views/app-404.vue', OPTIONS))
+        component: Vue.defineAsyncComponent(() => loadModule('./views/app-404.vue', OPTIONS)),
+        meta: { title: '404', icon: 'form' }
     }
 ]
 

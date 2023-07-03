@@ -44,7 +44,9 @@ module.exports = {
 </script>
  
 <style>
-.hello {
-  background-color: #ffe;
+.common-layout {
+  position: relative;
+    height: 100%;
+    width: 100%;
 }
 </style>
