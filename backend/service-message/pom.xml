@@ -38,6 +38,11 @@
       <groupId>javax.persistence</groupId>
       <artifactId>javax.persistence-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.jodd</groupId>
+      <artifactId>jodd-core</artifactId>
+      <version>5.3.0</version>
+    </dependency>
   </dependencies>
 
   <build>

@@ -8,6 +8,7 @@ import cn.gyw.backend.message.api.response.MessageRecordResponse;
 import cn.gyw.backend.message.domain.messagerecord.MessageMapper;
 import cn.gyw.backend.message.domain.messagerecord.MessageRecord;
 import cn.gyw.backend.message.domain.messagerecord.creator.MessageRecordCreator;
+import cn.gyw.backend.message.domain.messagerecord.domainservice.model.MessageSendModel;
 import cn.gyw.backend.message.domain.messagerecord.query.MessageRecordQuery;
 import cn.gyw.backend.message.domain.messagerecord.updater.MessageRecordUpdater;
 import cn.gyw.backend.message.domain.messagerecord.vo.MessageRecordVO;
@@ -37,6 +38,8 @@ public interface MessageRecordMapper {
     MessageRecord queryToEntity(MessageRecordQuery query);
 
     MessageRecordResponse vo2Response(MessageRecordVO vo);
+
+    MessageRecord model2Entity(MessageSendModel sendModel);
 
     default MessageRecordResponse vo2CustomResponse(MessageRecordVO vo) {
         MessageRecordResponse response = vo2Response(vo);
