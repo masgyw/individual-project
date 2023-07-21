@@ -5,9 +5,9 @@ import lombok.Value;
 
 public interface MessageRecordEvents {
 
-  @Value
-  class MessageRecordCreateEvent {
-    MessageRecord messageRecord;
-  }
+    @Value
+    class MessageRecordCreateEvent {
+        MessageRecord messageRecord;
+    }
 
 }
