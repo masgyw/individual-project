@@ -1,6 +1,21 @@
 package cn.gyw.backend.message.domain.messagerecord.events;
 
+import cn.gyw.backend.message.config.MessageProperties;
+import cn.gyw.backend.message.constant.MessageConstant;
+import cn.gyw.backend.message.constant.MessageErrorCode;
+import cn.gyw.backend.message.domain.messagerecord.MessageRecord;
 import cn.gyw.backend.message.domain.messagerecord.MsgTypeEnum;
+import cn.gyw.backend.message.domain.messagerecord.NoticeType;
+import cn.gyw.backend.message.domain.verifyrecord.creator.VerifyRecordCreator;
+import cn.gyw.backend.message.domain.verifyrecord.service.VerifyRecordService;
+import cn.gyw.backend.message.domain.verifyrecord.service.checker.CheckContext;
+import cn.gyw.backend.message.domain.verifyrecord.service.checker.SendIntervalChecker;
+import cn.gyw.backend.message.domain.verifyrecord.service.checker.SendMaxTimesChecker;
+import cn.gyw.backend.message.third.SmsSendModel;
+import cn.gyw.backend.message.third.SmsSendService;
+import cn.gyw.individual.commons.exceptions.BusinessException;
+import cn.gyw.individual.starters.extension.executor.ServiceExecutor;
+import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +24,8 @@ import org.apache.commons.collections4.MapUtils;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.Objects;
 
@@ -19,7 +36,7 @@ public class MessageRecordEventProcessor {
 
     private final ServiceExecutor serviceExecutor;
 
-    private final IVerifyRecordService verifyRecordService;
+    private final VerifyRecordService verifyRecordService;
 
     private final MessageProperties messageProperties;
 
@@ -36,7 +53,7 @@ public class MessageRecordEventProcessor {
             //如果是验证码，存储验证记录
             CheckContext checkContext = new CheckContext();
             Map<String, Object> params = JSONObject.parseObject(createEvent.getMessageRecord().getParams());
-            checkContext.setAccount(MapUtils.getString(params, MessageConstants.ACCOUNT));
+            checkContext.setAccount(MapUtils.getString(params, MessageConstant.ACCOUNT));
             checkContext.setTemplateCode(createEvent.getMessageRecord().getTemplateCode());
             boolean checkResult = ElementMatchers.any()
                     .and(new SendIntervalChecker())
@@ -48,7 +65,7 @@ public class MessageRecordEventProcessor {
             }
             VerifyRecordCreator creator = new VerifyRecordCreator();
             String verifyCode = RandomUtil.randomNumbers(messageProperties.getVerifyLength());
-            creator.setAccount(MapUtils.getString(params, MessageConstants.ACCOUNT));
+            creator.setAccount(MapUtils.getString(params, MessageConstant.ACCOUNT));
             creator.setTemplateCode(createEvent.getMessageRecord().getTemplateCode());
             creator.setContent(createEvent.getMessageRecord().getContent());
             creator.setVerifyCode(verifyCode);
@@ -63,7 +80,7 @@ public class MessageRecordEventProcessor {
      * @param createEvent
      */
     @EventListener
-    public void handleMessageForDing(MessageRecordCreateEvent createEvent) {
+    public void handleMessageForDing(MessageRecordEvents.MessageRecordCreateEvent createEvent) {
         NoticeType noticeType = createEvent.getMessageRecord().getNoticeType();
         MsgTypeEnum msgType = createEvent.getMessageRecord().getMsgType();
         //是通知的话进行处理
@@ -78,14 +95,14 @@ public class MessageRecordEventProcessor {
      * @param createEvent
      */
     @EventListener
-    public void handleMessageForSms(MessageRecordCreateEvent createEvent) {
+    public void handleMessageForSms(MessageRecordEvents.MessageRecordCreateEvent createEvent) {
         NoticeType noticeType = createEvent.getMessageRecord().getNoticeType();
         MsgTypeEnum msgType = createEvent.getMessageRecord().getMsgType();
         if (Objects.equals(NoticeType.SMS, noticeType) && Objects.equals(MsgTypeEnum.NOTICE, msgType)) {
             MessageRecord messageRecord = createEvent.getMessageRecord();
             SmsSendModel ssm = new SmsSendModel();
             //设置参数
-            Boolean sendResult = serviceExecutor.execute(ISmsSendService.class, SmsBiz.ALI, f -> {
+            Boolean sendResult = serviceExecutor.execute(SmsSendService.class, SmsBiz.ALI, f -> {
                 return f.sendSms(ssm);
             });
         }
@@ -97,7 +114,7 @@ public class MessageRecordEventProcessor {
      * @param createEvent
      */
     @EventListener
-    public void handleMessageForEmail(MessageRecordCreateEvent createEvent) {
+    public void handleMessageForEmail(MessageRecordEvents.MessageRecordCreateEvent createEvent) {
 
     }
 

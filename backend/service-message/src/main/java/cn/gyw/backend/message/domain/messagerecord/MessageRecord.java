@@ -78,6 +78,10 @@ public class MessageRecord extends BaseJpaAggregate {
     @IgnoreCreator
     private ValidStatus validStatus;
 
+    /**
+     * 初始化发送事件
+     * @param content 内容
+     */
     public void init(String content) {
         setContent(content);
         setValidStatus(ValidStatus.VALID);

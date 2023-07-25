@@ -1,10 +1,12 @@
 package cn.gyw.individual.commons.utils;
 
 import cn.gyw.individual.commons.annotations.NeedSetValueField;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -12,17 +14,38 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class SpringContextUtil implements ApplicationContextAware {
 
-    private ApplicationContext applicationContext;
+    private static ApplicationContext applicationContext;
+
+    private static Environment environment = null;
 
     public ApplicationContext getApplicationContext() {
         return applicationContext;
     }
 
+    public static <T> T getBean(Class<T> type) {
+        return applicationContext.getBean(type);
+    }
+
+    public static <T> T getBean(String beanId, Class<T> type) {
+        return applicationContext.getBean(beanId, type);
+    }
+
+    public static String getValue(String key, String defaultValue) {
+        try {
+            return environment.getProperty(key, defaultValue);
+        } catch (Exception e) {
+            log.error(String.format("spring environment get [%s] error:", key), e);
+        }
+        return defaultValue;
+    }
+
     /**
      * 设置@NeedSetValueField 注解修饰的值
+     *
      * @param obj
      * @throws Exception
      */
@@ -69,7 +92,6 @@ public class SpringContextUtil implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+        SpringContextUtil.applicationContext = applicationContext;
     }
-
 }

@@ -1,4 +1,4 @@
-package cn.gyw.backend.infrastructure.security.authorization;
+package cn.gyw.backend.infrastructure.security;
 
 import cn.gyw.individual.plugin.codegen.annotations.FieldDesc;
 import cn.gyw.individual.starters.security.base.BaseJwtUser;
