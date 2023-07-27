@@ -4,8 +4,8 @@ const port = process.env.port || process.env.npm_config_port || 80 // dev port
 function resolve (dir) {
   return path.join(__dirname, dir)
 }
-const name = 'vue3 ElementPlus Template'
-const apiPath = 'http://api.fund.eastmoney.com'
+const name = 'frontend-ui'
+const apiPath = 'http://127.0.0.1:9091'
 module.exports = {
   publicPath: '/',
   assetsDir: 'static',

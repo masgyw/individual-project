@@ -20,6 +20,7 @@
   </el-sub-menu>
   <el-menu-item :index="item.path" v-else>
     <template #title>
+      <i :class="item.meta.icon"></i>
       <span>{{ item.meta.title }}</span>
     </template>
   </el-menu-item>
