@@ -2,6 +2,7 @@ import { set, remove } from 'js-cookie'
 import { user } from '@/api'
 import asyncRoutes from '@/router/asyncRoutes'
 const hasPermission = (route, roles) => {
+  console.log('route:', route)
   // 判断单个路由中的角色是否包含在角色列表中，或者为any即所有角色均可访问
   return route.meta.roles.some(el => roles.includes(el)) || route.meta.roles.includes('any')
 }
@@ -18,6 +19,7 @@ const filterRoutes = (routes, roles) => {
 const users = {
   namespaced: true,
   state: () => ({
+    name: '',
     isLogin: false,
     token: '',
     roles: []
@@ -31,6 +33,9 @@ const users = {
     },
     setRoles (state, roles) {
       state.roles = roles
+    },
+    setName (state, name) {
+      state.name = name
     }
   },
   actions: {
@@ -38,6 +43,7 @@ const users = {
       // 设置登录状态和token
       commit('setLogin', true)
       commit('setToken', token)
+      commit('setName', 'admin')
       // 设置登录token的cookie，有效期可自定义
       set('frontend-ui-token', token, { expires: 3 })
     },
@@ -66,7 +72,8 @@ const users = {
   },
   getters: {
     isLogin: state => state.isLogin,
-    roles: state => state.roles
+    roles: state => state.roles,
+    name: state => state.name
   }
 }
 

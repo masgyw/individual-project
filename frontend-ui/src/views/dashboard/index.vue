@@ -1,31 +1,34 @@
 <template>
- <div class="">
-   <div>
-     <el-button @click="add">点击添加行数</el-button>
-   </div>
-   <div v-for="(item, index) in count" :key="index">{{ msg }}{{ index }}</div>
+ <div class="dashboard-container">
+  <div class="dashboard-text">管理中心欢迎您: {{ name }}</div>
  </div>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { reactive, computed, toRefs } from 'vue'
+import { useStore } from 'vuex'
 export default {
   name: 'Home',
   setup () {
-    const msg = ref('测试keepAlive效果')
-    const count = ref(10)
-    const add = () => {
-      count.value++
-    }
+    const { state } = useStore()
+    const params = reactive({
+      name: computed(() => state.user.name)
+    })
     return {
-      msg,
-      count,
-      add
+      ...toRefs(params)
     }
   }
 }
 </script>
 
 <style scoped lang = "scss">
-
+.dashboard {
+  &-container {
+    margin: 30px;
+  }
+  &-text {
+    font-size: 30px;
+    line-height: 46px;
+  }
+}
 </style>
