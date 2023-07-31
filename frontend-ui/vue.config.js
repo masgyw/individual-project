@@ -5,7 +5,7 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 const name = 'frontend-ui'
-const apiPath = 'http://127.0.0.1:9091'
+const apiPath = 'http://127.0.0.1:9090'
 module.exports = {
   publicPath: '/',
   assetsDir: 'static',

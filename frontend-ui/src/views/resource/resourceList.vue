@@ -36,29 +36,29 @@
       :data="list"
       style="width: 100%"
     >
-      <el-table-column label="资源名称">
-        <template slot-scope="scope">
+    <el-table-column label="资源名称" key="slot">
+        <template #default="scope">
           {{ scope.row.name }}
         </template>
       </el-table-column>
       <el-table-column label="所属平台" prop="platformId" :formatter="formatId" />
-      <el-table-column label="资源编码">
-        <template slot-scope="scope">
+      <el-table-column label="资源编码" key="slot">
+        <template #default="scope">
           {{ scope.row.code }}
         </template>
       </el-table-column>
-      <el-table-column label="url">
-        <template slot-scope="scope">
+      <el-table-column label="url" key="slot">
+        <template #default="scope">
           {{ scope.row.url }}
         </template>
       </el-table-column>
-      <el-table-column label="路由">
-        <template slot-scope="scope">
+      <el-table-column label="路由" key="slot">
+        <template #default="scope">
           {{ scope.row.router }}
         </template>
       </el-table-column>
-      <el-table-column label="状态">
-        <template slot-scope="scope">
+      <el-table-column label="状态" key="slot">
+        <template #default="scope">
           <el-button
             v-if="scope.row.validStatus == 'INVALID'"
             size="mini"
@@ -73,8 +73,8 @@
           >禁用</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
+      <el-table-column label="操作" key="slot">
+        <template #default="scope">
           <el-button
             size="mini"
             type="primary"
@@ -83,12 +83,13 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 官网推荐使用v-model 双向绑定 -->
     <el-pagination
       style="margin-top:15px"
-      align="right"
+      align="center"
       background
       layout="total, sizes, prev, pager, next, jumper"
-      :page-size="listQuery.limit"
+      v-model:page-size="listQuery.limit"
       :total="total"
       @current-change="fetchPage"
       @prev-click="fetchPrev"
@@ -99,7 +100,7 @@
 
 <script>
 
-// import { findByPage } from '@/api/resource/resource'
+import { resource } from '@/api'
 // import { findValidPlatforms } from '../../api/platform/platform'
 
 export default {
@@ -120,6 +121,7 @@ export default {
   },
   created() {
     // this.init()
+    this.fetchData()
   },
   methods: {
     init() {
@@ -144,7 +146,7 @@ export default {
         'size': this.listQuery.limit,
         'page': this.listQuery.page
       }
-      findByPage(queryData).then(response => {
+      resource.findByPage(queryData).then(response => {
         this.list = response.result.content
         this.listLoading = false
         this.total = response.result.total

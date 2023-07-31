@@ -14,6 +14,7 @@ const modules = apiModels.keys().reduce((module, modulePath) => {
   }
   return module
 }, {})
+console.log("api modules:", modules)
 
 module.exports = {
   ...modules

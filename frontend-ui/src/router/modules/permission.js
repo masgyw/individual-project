@@ -13,7 +13,7 @@ export default {
   isCollapse: true,
   children: [
     {
-      path: 'list',
+      path: '/permission/list',
       name: '资源列表',
       component: () => import('@/views/resource/resourceList'),
       meta: { title: '资源列表', icon: 'form', roles: ['admin', 'editor'] },
