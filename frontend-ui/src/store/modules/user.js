@@ -73,7 +73,8 @@ const users = {
   getters: {
     isLogin: state => state.isLogin,
     roles: state => state.roles,
-    name: state => state.name
+    name: state => state.name,
+    token: state => state.token
   }
 }
 

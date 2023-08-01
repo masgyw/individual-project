@@ -2,6 +2,9 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { omit } from 'lodash'
 import $router from '@/router'
+import store from '@/store'
+import { getToken } from '@/libs/auth'
+
 let showTips = false
 const CONTENT_TYPES = {
   1: 'application/json',
@@ -29,6 +32,14 @@ service.interceptors.request.use(
           ...config.data
         }
       }
+    }
+  
+    console.log('store', store.getters['user/token'])
+    if (store.getters['user/token']) {
+      // let each request carry token
+      // ['X-Token'] is a custom headers key
+      // please modify it according to the actual situation
+      config.headers['token'] = getToken()
     }
     if (config.funds) {
       config.headers.Host = 'api.fund.eastmoney.com'
@@ -106,7 +117,6 @@ export function ajax (method = 'post', url, options, showTips) {
   }
   if (method === 'delete') {
     /**
-     * 2020年11月16日 @chenxiaoming
      * delete 请求  兼容rest风格（请求参数拼接在路径上）
      */
     const [params] = Object.values(options.data)
