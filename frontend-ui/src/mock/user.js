@@ -3,7 +3,7 @@ const { get } = require('js-cookie')
 const tokens = {
   // 用户名和密码
   admin: {
-    token: 'admin-token',
+    token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbl90eXBlIjoxLCJpZCI6Mn0.asMuppTXN33-i8_enktCyGlxuP7RrSjz9Pcf_GEFLP8',
     password: 'admin123'
   },
   editor: {
@@ -13,7 +13,7 @@ const tokens = {
 }
 
 const users = {
-  'admin-token': {
+  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbl90eXBlIjoxLCJpZCI6Mn0.asMuppTXN33-i8_enktCyGlxuP7RrSjz9Pcf_GEFLP8': {
     roles: ['admin'],
     introduction: 'I am a super administrator',
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',

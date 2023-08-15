@@ -1,6 +1,8 @@
 package cn.gyw.backend.infrastructure.security.authentication.admin.password;
 
 import cn.gyw.backend.infrastructure.config.SecurityProperties;
+import cn.gyw.backend.infrastructure.constants.AuthConstants;
+import cn.gyw.backend.infrastructure.security.LoginUserType;
 import cn.gyw.backend.infrastructure.security.SecurityConfig;
 import cn.gyw.backend.system.domain.admin.AdminUser;
 import cn.gyw.backend.system.domain.admin.repository.AdminUserRepository;
@@ -51,8 +53,8 @@ public class AdminPasswordAuthenticationProvider extends BaseAuthenticationProvi
                     adminUser.get().getPassword());
             if (matches) {
                 Map<String, Object> jwtInfo = Maps.newHashMap();
-                jwtInfo.put("id", adminUser.get().getId());
-                jwtInfo.put("type", "admin");
+                jwtInfo.put(AuthConstants.ID, adminUser.get().getId());
+                jwtInfo.put(AuthConstants.LOGIN_USER_TYPE, LoginUserType.ADMIN_USER.getCode());
                 String jwtToken = JWTUtil.createToken(jwtInfo,
                         securityProperties.getSecret().getBytes(StandardCharsets.UTF_8));
                 return new LoginSuccessToken(jwtToken, adminUser.get().getUsername());

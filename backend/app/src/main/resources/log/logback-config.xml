@@ -105,12 +105,15 @@
 
   <!-- SQL 日志设置 -->
   <logger name="cn.gyw.backend" level="info" additivity="false">
+    <appender-ref ref="CONSOLE"/>
     <appender-ref ref="ERROR_FILE"/>
   </logger>
   <logger name="cn.gyw.backend" level="info" additivity="false">
+    <appender-ref ref="CONSOLE"/>
     <appender-ref ref="API_FILE"/>
   </logger>
   <logger name="cn.gyw.backend" level="info" additivity="false">
+    <appender-ref ref="CONSOLE"/>
     <appender-ref ref="APP_FILE"/>
   </logger>
 
