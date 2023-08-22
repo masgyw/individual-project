@@ -8,14 +8,14 @@ const config = {
     // 登录接口
     {
       key: 'login',
-      url: '/frontend-ui/user/login',
+      url: '/auth/admin/pass',
       method: 'post',
       showTips: true
     },
     // 获取用户角色接口
     {
       key: 'getRoles',
-      url: '/frontend-ui/user/getRoles',
+      url: '/role/v1/findByPage',
       method: 'get',
       showTips: false
     }

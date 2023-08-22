@@ -11,7 +11,7 @@ import { mockXHR } from './mock'
 // 如果要使用.scss样式文件，则需要引入base.scss文件
 // import 'element-plus/packages/theme-chalk/src/base.scss'
 // mockjs模拟接口数据引入
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'mock') {
   mockXHR()
 }
 

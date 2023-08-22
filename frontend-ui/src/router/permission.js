@@ -12,7 +12,8 @@ router.beforeEach(async to => {
   NProgress.start()
   const hasToken = get('frontend-ui-token')
   const { path } = to
-  const hasRoles = store.getters['user/roles'].length > 0
+  console.log('router before to ', to, store.getters['user/roles'])
+  const hasRoles = store.getters['user/roles'];
   if (hasToken) {
     // 有token并且已获取动态路由，前往登录页时重定向到主页，否则继续前往目标页面
     if (hasRoles) return path === '/login' ? '/' : true

@@ -4,8 +4,8 @@
       <div class="login-form-title">frontend-ui</div>
       <div class="login-form-main">
         <el-form ref="loginForm" :model="form" :rules="rules">
-          <el-form-item prop="userName">
-            <el-input v-model="form.userName" clearable>
+          <el-form-item prop="username">
+            <el-input v-model="form.username" clearable>
               <template #append>
                 <el-icon>
                   <UserFilled />
@@ -13,8 +13,8 @@
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item prop="pwd">
-            <el-input v-model="form.pwd" show-password clearable>
+          <el-form-item prop="password">
+            <el-input v-model="form.password" show-password clearable>
               <template #append>
                 <el-icon>
                   <Lock />
@@ -47,11 +47,11 @@ export default {
     const { dispatch } = useStore()
     const { push } = useRouter()
     const isLoading = ref(false)
-    const form = reactive({ userName: '', pwd: '' })
+    const form = reactive({ username: '', password: '' })
     const loginForm = ref(null)
     const rules = ref({
-      userName: [{ required: true, message: '请输入用户名', trigger: ['blur', 'change'] }],
-      pwd: [{ required: true, message: '请输入密码', trigger: ['blur', 'change'] }]
+      username: [{ required: true, message: '请输入用户名', trigger: ['blur', 'change'] }],
+      password: [{ required: true, message: '请输入密码', trigger: ['blur', 'change'] }]
     })
     const handleSubmit = () => {
       loginForm.value.validate(async valid => {
@@ -60,8 +60,8 @@ export default {
         const res = await user.login({
           ...form
         }).finally(() => { isLoading.value = false })
-        if (res.code === 20000) {
-          dispatch('user/setLogin', res.data.token)
+        if (res.code === 0) {
+          dispatch('user/setLogin', res.result.token)
           push('/dashboard')
         }
       })
