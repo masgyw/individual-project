@@ -15,7 +15,7 @@ const config = {
     // 获取用户角色接口
     {
       key: 'getRoles',
-      url: '/role/v1/findByPage',
+      url: '/role/v1/getRoles',
       method: 'get',
       showTips: false
     }

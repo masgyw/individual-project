@@ -34,7 +34,7 @@ service.interceptors.request.use(
       }
     }
   
-    console.log('store', store.getters['user/token'])
+    console.log('axios token:', store.getters['user/token'])
     if (store.getters['user/token']) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
@@ -71,10 +71,11 @@ service.interceptors.response.use(
      */
   response => {
     const res = response.data
+    console.log('res=', res)
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code === 20000) {
+    if (res.code === 0) {
       showTips && ElMessage({
-        message: res.message,
+        message: res.msg,
         type: 'success',
         duration: 5 * 1000
       })
@@ -82,7 +83,7 @@ service.interceptors.response.use(
       return res
     } else {
       ElMessage({
-        message: `错误信息：${res.message}`,
+        message: `错误信息：${res.msg}`,
         type: 'error',
         duration: 5 * 1000
       })

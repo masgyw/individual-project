@@ -14,8 +14,12 @@ import cn.gyw.individual.commons.enums.CodeEnum;
 import cn.gyw.individual.commons.model.DataResponse;
 import cn.gyw.individual.commons.model.PageData;
 import cn.gyw.individual.commons.model.PageRequestWrapper;
+
 import java.lang.Long;
 import java.lang.String;
+import java.util.Arrays;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,73 +35,78 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("role/v1")
 @RequiredArgsConstructor
 public class RoleController {
-  private final RoleService roleService;
+    private final RoleService roleService;
 
-  /**
-   * createRequest
-   */
-  @PostMapping("createRole")
-  public DataResponse<Long> createRole(@RequestBody RoleCreateRequest request) {
-    RoleCreator creator = RoleMapper.INSTANCE.request2Dto(request);
-    return DataResponse.success(roleService.createRole(creator));
-  }
+    /**
+     * createRequest
+     */
+    @PostMapping("createRole")
+    public DataResponse<Long> createRole(@RequestBody RoleCreateRequest request) {
+        RoleCreator creator = RoleMapper.INSTANCE.request2Dto(request);
+        return DataResponse.success(roleService.createRole(creator));
+    }
 
-  /**
-   * update request
-   */
-  @PostMapping("updateRole")
-  public DataResponse<String> updateRole(@RequestBody RoleUpdateRequest request) {
-    RoleUpdater updater = RoleMapper.INSTANCE.request2Updater(request);
-    roleService.updateRole(updater);
-    return DataResponse.success(CodeEnum.Success.getName());
-  }
+    /**
+     * update request
+     */
+    @PostMapping("updateRole")
+    public DataResponse<String> updateRole(@RequestBody RoleUpdateRequest request) {
+        RoleUpdater updater = RoleMapper.INSTANCE.request2Updater(request);
+        roleService.updateRole(updater);
+        return DataResponse.success(CodeEnum.Success.getName());
+    }
 
-  /**
-   * valid
-   */
-  @PostMapping("valid/{id}")
-  public DataResponse<String> validRole(@PathVariable Long id) {
-    roleService.validRole(id);
-    return DataResponse.success(CodeEnum.Success.getName());
-  }
+    /**
+     * valid
+     */
+    @PostMapping("valid/{id}")
+    public DataResponse<String> validRole(@PathVariable Long id) {
+        roleService.validRole(id);
+        return DataResponse.success(CodeEnum.Success.getName());
+    }
 
-  /**
-   * invalid
-   */
-  @PostMapping("invalid/{id}")
-  public DataResponse<String> invalidRole(@PathVariable Long id) {
-    roleService.invalidRole(id);
-    return DataResponse.success(CodeEnum.Success.getName());
-  }
+    /**
+     * invalid
+     */
+    @PostMapping("invalid/{id}")
+    public DataResponse<String> invalidRole(@PathVariable Long id) {
+        roleService.invalidRole(id);
+        return DataResponse.success(CodeEnum.Success.getName());
+    }
 
-  /**
-   * findById
-   */
-  @GetMapping("findById/{id}")
-  public DataResponse<RoleVO> findById(@PathVariable Long id) {
-    RoleVO vo = roleService.findById(id);
-    return DataResponse.success(vo);
-  }
+    /**
+     * findById
+     */
+    @GetMapping("findById/{id}")
+    public DataResponse<RoleVO> findById(@PathVariable Long id) {
+        RoleVO vo = roleService.findById(id);
+        return DataResponse.success(vo);
+    }
 
-  /**
-   * findByPage request
-   */
-  @PostMapping("findByPage")
-  public DataResponse<PageData<RoleVO>> findByPage(
-      @RequestBody PageRequestWrapper<RoleQueryRequest> request) {
-    PageRequestWrapper<RoleQuery> wrapper = new PageRequestWrapper<>();
-    wrapper.setBean(RoleMapper.INSTANCE.request2Query(request.getBean()));
-    wrapper.setSorts(request.getSorts());
+    /**
+     * findByPage request
+     */
+    @PostMapping("findByPage")
+    public DataResponse<PageData<RoleVO>> findByPage(
+            @RequestBody PageRequestWrapper<RoleQueryRequest> request) {
+        PageRequestWrapper<RoleQuery> wrapper = new PageRequestWrapper<>();
+        wrapper.setBean(RoleMapper.INSTANCE.request2Query(request.getBean()));
+        wrapper.setSorts(request.getSorts());
         wrapper.setPageSize(request.getPageSize());
         wrapper.setPage(request.getPage());
-    Page<RoleVO> page = roleService.findByPage(wrapper);
-    return DataResponse.success(
-            PageData.of(
-                page.getContent(),
-                page.getTotalElements(),
-                page.getSize(),
-                page.getNumber(),
-                page.getTotalPages())
+        Page<RoleVO> page = roleService.findByPage(wrapper);
+        return DataResponse.success(
+                PageData.of(
+                        page.getContent(),
+                        page.getTotalElements(),
+                        page.getSize(),
+                        page.getNumber(),
+                        page.getTotalPages())
         );
-  }
+    }
+
+    @GetMapping("getRoles")
+    public DataResponse<List<String>> getRoles() {
+        return DataResponse.success(Arrays.asList("admin"));
+    }
 }

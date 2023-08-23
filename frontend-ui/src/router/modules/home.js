@@ -5,13 +5,13 @@ export default {
   component: Layout,
   redirect: '/dashboard',
   name: 'Dashboard',
-  meta: { title: '首页', roles: ['admin', 'editor'], icon: 'el-icon-menu' },
+  meta: { title: '首页', roles: [], icon: 'el-icon-menu' },
   children: [
     {
       path: '/dashboard',
       name: 'Home',
       component: () => import('@/views/dashboard'),
-      meta: { title: '主页面', roles: ['admin', 'editor'], icon: 'el-icon-menu' }
+      meta: { title: '主页面', roles: ['admin', 'editor', 'any'], icon: 'el-icon-menu' }
     }
   ]
 }
