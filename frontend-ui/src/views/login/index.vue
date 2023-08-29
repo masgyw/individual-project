@@ -60,7 +60,8 @@ export default {
         const res = await user.login({
           ...form
         }).finally(() => { isLoading.value = false })
-        if (res.code === 0) {
+        if (res.code === 20000) {
+          // dispatch('user/setLogin', res.data.token)
           dispatch('user/setLogin', res.result.token)
           push('/dashboard')
         }

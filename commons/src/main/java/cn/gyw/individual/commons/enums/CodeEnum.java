@@ -11,7 +11,7 @@ public enum CodeEnum implements BaseEnum<CodeEnum>, BusinessExceptionAssert {
     /**
      * 整个系统通用编码 xx_xx_xxxx (服务标识_业务_错误编号，便于错误快速定位
      */
-    Success(0, "操作成功"),
+    Success(20000, "操作成功"),
     Fail(1, "操作失败"),
 
     NotFindError(10001, "未查询到信息"),

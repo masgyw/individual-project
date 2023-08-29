@@ -12,17 +12,14 @@ router.beforeEach(async to => {
   NProgress.start()
   const hasToken = get('frontend-ui-token')
   const { path } = to
-  // console.log('router before to ', to, store.getters['user/roles'])
-  const hasRoles = store.getters['user/roles'];
+  console.log('router getRoles:', store.getters['user/roles'], to)
+  const hasRoles = store.getters['user/roles'].length > 0
   if (hasToken) {
     // 有token并且已获取动态路由，前往登录页时重定向到主页，否则继续前往目标页面
-    if (hasRoles) {
-      console.log('hasRoles, path:', hasRoles, path)
-      return path === '/login' ? '/' : true
-    }
+    if (hasRoles) return path === '/login' ? '/' : true
     // 没有用户角色时，需要获取用户角色，然后过滤出相应的异步路由表
     const asyncRoutes = await store.dispatch('user/getRoles')
-    console.log(asyncRoutes)
+    console.log('router asyncRoutes:', asyncRoutes)
     // 将处理好的异步路由保存至vuex
     store.commit('app/setAsyncRoutes', asyncRoutes)
     asyncRoutes.forEach(item => {

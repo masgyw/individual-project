@@ -33,13 +33,16 @@ service.interceptors.request.use(
         }
       }
     }
+
+    let token = store.getters['user/token'];
+    if (token == undefined || token == '') {
+      // cookie get token
+      token =  getToken();
+      console.log('axios cookie getToken:', getToken())
+    }
   
-    console.log('axios token:', store.getters['user/token'])
-    if (store.getters['user/token']) {
-      // let each request carry token
-      // ['X-Token'] is a custom headers key
-      // please modify it according to the actual situation
-      config.headers['token'] = getToken()
+    if (token) {
+      config.headers['token'] = token
     }
     if (config.funds) {
       config.headers.Host = 'api.fund.eastmoney.com'
@@ -71,11 +74,10 @@ service.interceptors.response.use(
      */
   response => {
     const res = response.data
-    console.log('res=', res)
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code === 0) {
+    if (res.code === 20000) {
       showTips && ElMessage({
-        message: res.msg,
+        message: res.message,
         type: 'success',
         duration: 5 * 1000
       })
@@ -83,7 +85,7 @@ service.interceptors.response.use(
       return res
     } else {
       ElMessage({
-        message: `错误信息：${res.msg}`,
+        message: `错误信息：${res.message}`,
         type: 'error',
         duration: 5 * 1000
       })
@@ -93,6 +95,7 @@ service.interceptors.response.use(
     }
   },
   error => {
+    console.log('axios error :', error);
     if (error.response.status === 401) { // 401为token失效，重定向到登录页
       $router.replace({ path: '/login', query: {} })
       return
@@ -118,6 +121,7 @@ export function ajax (method = 'post', url, options, showTips) {
   }
   if (method === 'delete') {
     /**
+     * 2020年11月16日 @chenxiaoming
      * delete 请求  兼容rest风格（请求参数拼接在路径上）
      */
     const [params] = Object.values(options.data)
