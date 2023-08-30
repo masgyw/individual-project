@@ -7,7 +7,7 @@ const config = {
     // 分页查询接口
     {
       key: 'findByPage',
-      url: '/resource/findByPage',
+      url: '/resource/v1/findByPage',
       method: 'post',
       showTips: true
     }

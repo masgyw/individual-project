@@ -5,7 +5,7 @@ export default {
   component: Layout,
   redirect: '/dashboard',
   name: 'Dashboard',
-  meta: { title: '首页', roles: [], icon: 'el-icon-menu' },
+  meta: { title: '首页', roles: ['admin'], icon: 'el-icon-menu' },
   children: [
     {
       path: '/dashboard',

@@ -143,11 +143,11 @@ export default {
           'code': this.listQuery.code,
           'platformId': this.listQuery.platformId
         },
-        'size': this.listQuery.limit,
+        'pageSize': this.listQuery.limit,
         'page': this.listQuery.page
       }
       resource.findByPage(queryData).then(response => {
-        this.list = response.result.content
+        this.list = response.result.records
         this.listLoading = false
         this.total = response.result.total
       })

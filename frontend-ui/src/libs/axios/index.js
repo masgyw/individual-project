@@ -77,7 +77,7 @@ service.interceptors.response.use(
     // if the custom code is not 20000, it is judged as an error.
     if (res.code === 20000) {
       showTips && ElMessage({
-        message: res.message,
+        message: `成功信息：${res.msg}`,
         type: 'success',
         duration: 5 * 1000
       })
@@ -85,7 +85,7 @@ service.interceptors.response.use(
       return res
     } else {
       ElMessage({
-        message: `错误信息：${res.message}`,
+        message: `错误信息：${res.msg}`,
         type: 'error',
         duration: 5 * 1000
       })

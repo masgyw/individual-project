@@ -62,7 +62,7 @@ public class SystemDSConfig {
                 .build();
 
         ds.setMaximumPoolSize(2);
-        ds.setMaxLifetime(0);
+        ds.setMaxLifetime(70000);
         return ds;
     }
 

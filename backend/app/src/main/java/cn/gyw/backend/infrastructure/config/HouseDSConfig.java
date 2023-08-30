@@ -56,8 +56,8 @@ public class HouseDSConfig {
                 .password(pwd)
                 .build();
 
-        ds.setMaximumPoolSize(50);
-        ds.setMaxLifetime(0);
+        ds.setMaximumPoolSize(2);
+        ds.setMaxLifetime(70000);
         return ds;
     }
 
