@@ -13,13 +13,15 @@ const config = {
     },
     {
       key: 'validRoleGroup',
-      url: '/admin/roleGroup/validRoleGroup/' + id,
-      method: 'post'
+      url: '/admin/roleGroup/validRoleGroup',
+      method: 'post', 
+      pathParam: true
     },
     {
       key: 'invalidRoleGroup',
-      url: '/admin/roleGroup/invalidRoleGroup/' + id,
-      method: 'post'
+      url: '/admin/roleGroup/invalidRoleGroup',
+      method: 'post',
+      pathParam: true
     },
     {
       key: 'findRoleGroupByPage',

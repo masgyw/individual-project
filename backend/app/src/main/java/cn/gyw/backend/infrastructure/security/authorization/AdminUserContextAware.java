@@ -14,9 +14,14 @@ import cn.gyw.individual.starters.security.exception.CustomAuthenticationExcepti
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -44,6 +49,12 @@ public class AdminUserContextAware implements UserContextAware {
             AdminUserVO vo = adminUserService.findById(userId);
             SystemJwtUser systemJwtUser = new SystemJwtUser();
             systemJwtUser.setUsername(vo.getUsername());
+            List<GrantedAuthority> authorities = new ArrayList<>();
+            // TODO 系统获取角色
+            GrantedAuthority role = new SimpleGrantedAuthority("ROLE_ADMIN");
+            authorities.add(role);
+
+            systemJwtUser.setAuthorities(authorities);
 
             return systemJwtUser;
         }

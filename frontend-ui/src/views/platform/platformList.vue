@@ -12,10 +12,7 @@
         </el-col>
       </el-row> <br>
     </div>
-    <el-table
-      :data="list"
-      style="width: 100%"
-    >
+    <el-table :data="list" style="width: 100%">
       <el-table-column label="平台名称">
         <template v-slot="scope">
           {{ scope.row.name }}
@@ -27,54 +24,34 @@
         </template>
       </el-table-column>
       <el-table-column label="状态">
-        <template slot-scope="scope">
-          <el-button
-            v-if="scope.row.validStatus == 'INVALID'"
-            size="mini"
-            type="success"
-            @click="handleOnline(scope.row.id)"
-          >启用</el-button>
-          <el-button
-            v-if="scope.row.validStatus == 'VALID'"
-            size="mini"
-            type="danger"
-            @click="handleOffline(scope.row.id)"
-          >禁用</el-button>
+        <template v-slot="scope">
+          <el-button v-if="scope.row.validStatus == 'INVALID'" size="mini" type="success"
+            @click="handleOnline(scope.row.id)">启用</el-button>
+          <el-button v-if="scope.row.validStatus == 'VALID'" size="mini" type="danger"
+            @click="handleOffline(scope.row.id)">禁用</el-button>
         </template>
       </el-table-column>
       <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="primary"
-            @click="handleUpdate(scope.row)"
-          >修改</el-button>
+        <template v-slot="scope">
+          <el-button size="mini" type="primary" @click="handleUpdate(scope.row)">修改</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      style="margin-top:15px"
-      align="right"
-      background
-      layout="total, sizes, prev, pager, next, jumper"
-      :page-size="listQuery.limit"
-      :total="total"
-      @current-change="fetchPage"
-      @prev-click="fetchPrev"
-      @next-click="fetchNext"
-    />
+    <el-pagination style="margin-top:15px" align="right" background layout="total, sizes, prev, pager, next, jumper"
+      :page-size="listQuery.limit" :total="total" @current-change="fetchPage" @prev-click="fetchPrev"
+      @next-click="fetchNext" />
 
-    <el-dialog :visible.sync="addFormVisible" title="添加平台">
+    <el-dialog v-model="addFormVisible" title="添加平台">
       <el-row :gutter="15">
         <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
           <el-col :span="20">
             <el-form-item label="平台名称" prop="code">
-              <el-input v-model="formData.name" placeholder="请输入平台名称" clearable :style="{width: '100%'}" />
+              <el-input v-model="formData.name" placeholder="请输入平台名称" clearable :style="{ width: '100%' }" />
             </el-form-item>
           </el-col>
           <el-col :span="20">
             <el-form-item label="平台编码" prop="name">
-              <el-input v-model="formData.code" placeholder="请输入平台编码" clearable :style="{width: '100%'}" />
+              <el-input v-model="formData.code" placeholder="请输入平台编码" clearable :style="{ width: '100%' }" />
             </el-form-item>
           </el-col>
         </el-form>
@@ -85,17 +62,17 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="updateFormVisible" title="修改平台">
+    <el-dialog v-model="updateFormVisible" title="修改平台">
       <el-row :gutter="15">
         <el-form ref="updateForm" :model="updateFormData" :rules="rules" size="medium" label-width="100px">
           <el-col :span="20">
             <el-form-item label="平台名称" prop="code">
-              <el-input v-model="updateFormData.name" placeholder="请输入平台名称" clearable :style="{width: '100%'}" />
+              <el-input v-model="updateFormData.name" placeholder="请输入平台名称" clearable :style="{ width: '100%' }" />
             </el-form-item>
           </el-col>
           <el-col :span="20">
             <el-form-item label="平台编码" prop="name">
-              <el-input v-model="updateFormData.code" placeholder="请输入平台编码" clearable :style="{width: '100%'}" />
+              <el-input v-model="updateFormData.code" placeholder="请输入平台编码" clearable :style="{ width: '100%' }" />
             </el-form-item>
           </el-col>
         </el-form>
@@ -109,7 +86,9 @@
 </template>
 
 <script>
-import { findPlatformByPage, savePlatform, updatePlatform, validPlatform, invalidPlatform } from '../../api/platform/platform'
+// import { findPlatformByPage, savePlatform, updatePlatform, validPlatform, invalidPlatform } from '../../api/platform/platform'
+
+import { platform } from '@/api'
 
 export default {
   components: {},
@@ -164,13 +143,13 @@ export default {
         'bean': {
           'name': this.listQuery.name
         },
-        'size': this.listQuery.limit,
+        'pageSize': this.listQuery.limit,
         'page': this.listQuery.page
       }
-      findPlatformByPage(queryData).then(response => {
-        this.list = response.result.content
+      platform.findPlatformByPage(queryData).then(response => {
+        this.list = response.result.records
         this.listLoading = false
-        this.total = response.result.totalElements
+        this.total = parseInt(response.result.total)
       })
     },
     search() {
@@ -191,7 +170,7 @@ export default {
       this.updateFormVisible = true
     },
     handleOnline(id) {
-      validPlatform(id).then(response => {
+      platform.validPlatform(id).then(response => {
         this.$message.success({
           type: 'success',
           message: '启用成功'
@@ -200,7 +179,7 @@ export default {
       })
     },
     handleOffline(id) {
-      invalidPlatform(id).then(response => {
+      platform.invalidPlatform(id).then(response => {
         this.$message.success({
           type: 'success',
           message: '禁用成功'
@@ -213,6 +192,7 @@ export default {
       this.fetchData()
     },
     handleAdd() {
+      console.log("handle add button")
       this.addFormVisible = true
     },
     fetchPrev() {
@@ -237,11 +217,11 @@ export default {
       this.$refs['elForm'].validate(valid => {
         if (!valid) return
         const requestData =
-            {
-              'code': this.formData.code,
-              'name': this.formData.name
-            }
-        savePlatform(requestData).then(response => {
+        {
+          'code': this.formData.code,
+          'name': this.formData.name
+        }
+        platform.savePlatform(requestData).then(response => {
           this.$message.success({
             type: 'success',
             message: '保存成功'
@@ -256,12 +236,12 @@ export default {
       this.$refs['updateForm'].validate(valid => {
         if (!valid) return
         const requestData =
-            {
-              'name': this.updateFormData.name,
-              'code': this.updateFormData.code,
-              'id': this.updateFormData.id
-            }
-        updatePlatform(requestData).then(response => {
+        {
+          'name': this.updateFormData.name,
+          'code': this.updateFormData.code,
+          'id': this.updateFormData.id
+        }
+        platform.updatePlatform(requestData).then(response => {
           this.$message.success({
             type: 'success',
             message: '更新成功'

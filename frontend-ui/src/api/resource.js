@@ -10,7 +10,21 @@ const config = {
       url: '/resource/v1/findByPage',
       method: 'post',
       showTips: true
-    }
+    },
+    {
+      key: 'saveResource',
+      url: '/resource/v1/createResource',
+      method: 'post',
+      showTips: true
+    },
+    {
+      key: 'getResourceTree',
+      url: '/resource/v1/getResourceTreeByPlatform',
+      method: 'post',
+      showTips: true,
+      pathParam: true
+    },
+
   ]
 }
 

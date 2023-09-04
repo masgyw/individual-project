@@ -18,14 +18,16 @@ const config = {
 
     {
       key: 'validRole',
-      url: '/admin/role/valid/' + id,
-      method: 'post'
+      url: '/admin/role/valid',
+      method: 'post',
+      pathParam: true
     },
 
     {
       key: 'invalidRole',
-      url: '/admin/role/invalid/' + id,
-      method: 'post'
+      url: '/admin/role/invalid',
+      method: 'post',
+      pathParam: true
     },
 
     {
@@ -72,8 +74,9 @@ const config = {
 
     {
       key: 'getRoleResourceIds',
-      url: '/admin/role/getRoleResourceIds/' + roleId,
-      method: 'post'
+      url: '/admin/role/getRoleResourceIds',
+      method: 'post',
+      pathParam: true
     },
 
     {

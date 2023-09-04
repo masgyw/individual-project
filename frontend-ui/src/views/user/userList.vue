@@ -32,7 +32,7 @@
         </template>
       </el-table-column>
       <el-table-column label="状态">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-button
             v-if="scope.row.validStatus == 'INVALID'"
             size="small"
@@ -48,7 +48,7 @@
         </template>
       </el-table-column>
       <el-table-column label="分配角色">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-button
             size="mini"
             type="primary"
@@ -57,7 +57,7 @@
         </template>
       </el-table-column>
       <el-table-column label="分配平台">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-button
             size="mini"
             type="primary"
@@ -104,7 +104,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="showPlatformTree" title="请选择给当前用户要授权的平台">
+    <el-dialog v-model="showPlatformTree" title="请选择给当前用户要授权的平台">
       <el-row>
         <el-form>
           <el-form-item>
@@ -130,7 +130,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="addForm" title="添加用户">
+    <el-dialog v-model="addForm" title="添加用户">
       <el-form ref="addForm" :model="addFormData" :rules="rules" size="medium" label-width="100px">
         <el-form-item label="姓名" prop="username">
           <el-input v-model="addFormData.username" placeholder="请输入姓名" clearable :style="{width: '100%'}" />
@@ -148,7 +148,9 @@
 </template>
 
 <script>
-import { findAllUsersByPage, getUserRoles, grantUserRoles, validUser, invalidUser, getUserPlatforms, grantUserPlatforms, create } from '../../api/sysuser/sysuser'
+// import { findAllUsersByPage, getUserRoles, grantUserRoles, validUser, invalidUser, getUserPlatforms, grantUserPlatforms, create } from '../../api/sysuser/sysuser'
+
+import { adminUser } from '@/api'
 
 export default {
   data() {
@@ -217,13 +219,13 @@ export default {
         'bean': {
           'phone': this.listQuery.phone
         },
-        'size': this.listQuery.limit,
+        'pageSize': this.listQuery.limit,
         'page': this.listQuery.page
       }
-      findAllUsersByPage(queryData).then(response => {
-        this.list = response.result.content
+      adminUser.findAllUsersByPage(queryData).then(response => {
+        this.list = response.result.records
         this.listLoading = false
-        this.total = response.result.totalElements
+        this.total = response.result.total
       })
     },
     search() {
@@ -238,7 +240,7 @@ export default {
       this.fetchData()
     },
     handleOnline(id) {
-      validUser(id).then(response => {
+      adminUser.validUser(id).then(response => {
         this.$message.success({
           message: '启用成功',
           type: 'success'
@@ -247,7 +249,7 @@ export default {
       })
     },
     handleOffline(id) {
-      invalidUser(id).then(response => {
+      adminUser.invalidUser(id).then(response => {
         this.$message.success({
           message: '禁用成功',
           type: 'success'
@@ -258,7 +260,7 @@ export default {
     handelConfirm() {
       this.$refs['addForm'].validate(valid => {
         if (!valid) return
-        create(JSON.stringify(this.addFormData)).then(response => {
+        adminUser.create(JSON.stringify(this.addFormData)).then(response => {
           this.$message.success({
             type: 'success',
             message: '保存成功'
@@ -289,7 +291,7 @@ export default {
     },
     showRoleTree(row) {
       this.grantUserId = row.id
-      getUserRoles(row.id).then(response => {
+      adminUser.getUserRoles(row.id).then(response => {
         this.selectRes = response.result
         this.showTree = true
       })
@@ -300,7 +302,7 @@ export default {
         'code': '',
         'name': ''
       }
-      getUserPlatforms(row.id).then(response => {
+      adminUser.getUserPlatforms(row.id).then(response => {
         this.selectPlatformRes = response.result
         this.showPlatformTree = true
       })
@@ -319,7 +321,7 @@ export default {
         'roleIds': this.$refs.tree.getCheckedKeys(),
         'userId': this.grantUserId
       }
-      grantUserRoles(request).then(response => {
+      adminUser.grantUserRoles(request).then(response => {
         this.$message.success({
           type: 'success',
           message: '授权成功'
@@ -332,7 +334,7 @@ export default {
         'platformIds': this.$refs.ptree.getCheckedKeys(),
         'userId': this.grantUserId
       }
-      grantUserPlatforms(request).then(response => {
+      adminUser.grantUserPlatforms(request).then(response => {
         this.$message.success({
           type: 'success',
           message: '授权成功'

@@ -19,7 +19,8 @@ import org.mapstruct.factory.Mappers;
 @Mapper(
         uses = {
                 GenericEnumMapper.class,
-                DateMapper.class
+                DateMapper.class,
+                ResourceEnumMapper.class
         }
 )
 public interface ResourceMapper {

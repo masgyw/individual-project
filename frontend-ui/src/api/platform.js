@@ -3,41 +3,42 @@
  */
  import { generate } from '@/libs/axios'
 
+ // 先不加前缀 /admin
  const config = {
     items: [
       {
         key: 'savePlatform',
-        url: '/admin/platform/create',
+        url: '/platform/v1/create',
         method: 'post',
         showTips: true
       },
       {
         key: 'updatePlatform',
-        url: '/admin/platform/update',
+        url: '/platform/v1/update',
         method: 'post',
         showTips: true
       },
       {
         key: 'findPlatformByPage',
-        url: '/admin/platform/findByPage',
+        url: '/platform/v1/findByPage',
         method: 'post',
         showTips: true
       },
       {
         key: 'findValidPlatforms',
-        url: '/admin/platform/findAll',
+        url: '/platform/v1/findAll',
         method: 'post',
         showTips: true
       },
       {
         key: 'validPlatform',
-        url: '/admin/platform/valid',
+        url: '/platform/v1/valid',
         method: 'post',
         showTips: true
       },
       {
         key: 'invalidPlatform',
-        url: '/admin/platform/invalid',
+        url: '/platform/v1/invalid',
         method: 'post',
         showTips: true
       }

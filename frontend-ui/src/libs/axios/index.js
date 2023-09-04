@@ -138,7 +138,12 @@ export function generate (config) {
   const { items } = config
   for (let i = 0, len = items.length; i < len; i++) {
     map[items[i].key] = function (data) {
-      return ajax(items[i].method, (items[i].prefix || config.prefix || '') + items[i].url, {
+      // 路径参数
+      let pathVar = ''
+      if (items[i].pathParam) {
+        pathVar = '/' + data
+      }
+      return ajax(items[i].method, (items[i].prefix || config.prefix || '') + items[i].url + pathVar, {
         data,
         ...(omit(items[i], ['key', 'url', 'method', 'prefix', 'params']) || {})
       }, items[i].showTips)

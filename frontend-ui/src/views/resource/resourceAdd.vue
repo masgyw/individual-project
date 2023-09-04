@@ -51,7 +51,7 @@
                 v-for="(item, index) in platformOptions"
                 :key="index"
                 :label="item.name"
-                :value="item.id"
+                :value="item.code"
                 :disabled="item.disabled"
               />
             </el-select>
@@ -101,7 +101,7 @@
       </el-form>
     </el-row>
 
-    <el-dialog :visible.sync="showTree" title="请选择父级菜单">
+    <el-dialog v-model="showTree" title="请选择父级菜单">
       <el-tree
         ref="tree"
         :data="treeData"
@@ -127,6 +127,8 @@
 // import { saveResource } from '../../api/resource/resource'
 // import { findValidPlatforms } from '../../api/platform/platform'
 // import { getResourceTree } from '../../api/resource/resource'
+
+import { resource,platform } from '@/api'
 
 export default {
   components: {},
@@ -212,7 +214,7 @@ export default {
   computed: {},
   watch: {},
   created() {
-    // this.init()
+    this.init()
   },
   mounted() {},
   methods: {
@@ -232,7 +234,7 @@ export default {
             'resourceType': this.formData.sourceType,
             'url': this.formData.url
           }
-        saveResource(createRequest).then(response => {
+        resource.saveResource(createRequest).then(response => {
           this.$message.success({
             type: 'success',
             message: '保存成功'
@@ -250,7 +252,7 @@ export default {
           'code': '',
           'name': ''
         }
-      findValidPlatforms(requestData).then(response => {
+      platform.findValidPlatforms(requestData).then(response => {
         this.platformOptions = response.result
       })
     },
@@ -262,7 +264,7 @@ export default {
         })
         return
       }
-      getResourceTree(this.formData.platform).then(response => {
+      resource.getResourceTree(this.formData.platform).then(response => {
         this.treeData = response.result
         this.showTree = true
       })

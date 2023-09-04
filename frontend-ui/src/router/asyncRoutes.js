@@ -1,7 +1,7 @@
 // 这里实际上也可以使用webpack自动导入文件的功能来做
 // 但是这需要事先对文件进行排序化命名，避免一级菜单不符合预定的排序
 import home from './modules/home'
-import permission from './modules/permission'
+import auth from './modules/auth'
 import menu1 from './modules/menu1'
 import menu2 from './modules/menu2'
 import menu3 from './modules/menu3'
@@ -11,7 +11,7 @@ import menu6 from './modules/menu6'
 
 const asyncRoutes = [
   home,
-  permission,
+  auth,
   menu1,
   menu2,
   menu3,

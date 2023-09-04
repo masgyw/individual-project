@@ -31,23 +31,23 @@ export default {
     //   meta: { title: '资源修改', icon: 'form' },
     //   hidden: true
     // },
-    // {
-    //   path: 'roleList',
-    //   name: '角色管理',
-    //   component: () => import('@/views/role/roleList'),
-    //   meta: { title: '角色管理', icon: 'form' }
-    // },
-    // {
-    //   path: 'platformList',
-    //   name: '平台管理',
-    //   component: () => import('@/views/platform/platformList'),
-    //   meta: { title: '平台管理', icon: 'form' }
-    // },
-    // {
-    //   path: 'userList',
-    //   name: '后台用户列表',
-    //   component: () => import('@/views/user/userList'),
-    //   meta: { title: '后台用户列表', icon: 'form' }
-    // }
+    {
+      path: 'roleList',
+      name: '角色管理',
+      component: () => import('@/views/role/roleList'),
+      meta: { title: '角色管理', icon: 'form', roles: ['admin', 'editor'] }
+    },
+    {
+      path: 'platformList',
+      name: '平台管理',
+      component: () => import('@/views/platform/platformList'),
+      meta: { title: '平台管理', icon: 'form', roles: ['admin', 'editor'] }
+    },
+    {
+      path: 'userList',
+      name: '后台用户列表',
+      component: () => import('@/views/user/userList'),
+      meta: { title: '后台用户列表', icon: 'form' , roles: ['admin', 'editor']}
+    }
   ]
 }

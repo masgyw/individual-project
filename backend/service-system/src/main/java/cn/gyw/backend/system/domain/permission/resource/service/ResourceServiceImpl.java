@@ -17,6 +17,7 @@ import cn.gyw.individual.commons.model.PageRequestWrapper;
 import cn.gyw.individual.starters.jpa.support.EntityOperations;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,6 +95,14 @@ public class ResourceServiceImpl implements ResourceService {
         Pageable pageable = PageRequest.of(query.getPage() - 1, query.getPageSize(), Sort.by(
                 Sort.Direction.DESC, "createdAt"));
         Example<Resource> example = Example.of(ResourceMapper.INSTANCE.queryToEntity(query.getBean()));
+        Resource probe = example.getProbe();
+        if (StringUtils.isEmpty(probe.getCode())) {
+            probe.setCode(null);
+        }
+        if (StringUtils.isEmpty(probe.getName())) {
+            probe.setName(null);
+        }
+
         Page<Resource> page = resourceRepository.findAll(example, pageable);
         return new PageImpl<>(page.getContent().stream().map(entity -> new ResourceVO(entity))
                 .collect(Collectors.toList()), page.getPageable(), page.getTotalElements());

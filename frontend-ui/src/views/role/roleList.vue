@@ -208,9 +208,11 @@
 </template>
 
 <script>
-import { findRolesByPage, saveRole, invalidRole, validRole, updateRole, grantRoleResources, getRoleResourceIds } from '../../api/role/role'
-import { findValidPlatforms } from '../../api/platform/platform'
-import { getResourceTree } from '../../api/resource/resource'
+// import { findRolesByPage, saveRole, invalidRole, validRole, updateRole, grantRoleResources, getRoleResourceIds } from '@/api/role'
+// import { findValidPlatforms } from '../../api/platform/platform'
+// import { getResourceTree } from '../../api/resource/resource'
+
+import { resource,platform,role } from '@/api'
 
 export default {
   components: {},
@@ -284,7 +286,7 @@ export default {
           'code': '',
           'name': ''
         }
-      findValidPlatforms(requestData).then(response => {
+      platform.findValidPlatforms(requestData).then(response => {
         this.platformIdOptions = response.result
       })
       this.fetchData()
@@ -299,7 +301,7 @@ export default {
         'size': this.listQuery.limit,
         'page': this.listQuery.page
       }
-      findRolesByPage(queryData).then(response => {
+      role.findRolesByPage(queryData).then(response => {
         this.list = response.result.content
         this.listLoading = false
         this.total = response.result.total
@@ -328,7 +330,7 @@ export default {
       this.$router.push({ path: '/monitor/detail', query: { id: id }})
     },
     handleOnline(id) {
-      validRole(id).then(response => {
+      role.validRole(id).then(response => {
         this.$message.success({
           type: 'success',
           message: '启用成功'
@@ -337,7 +339,7 @@ export default {
       })
     },
     handleOffline(id) {
-      invalidRole(id).then(response => {
+      role.invalidRole(id).then(response => {
         this.$message.success({
           type: 'success',
           message: '禁用成功'
@@ -380,7 +382,7 @@ export default {
             'platformId': this.formData.platformId,
             'roleDesc': this.formData.roleDesc
           }
-        saveRole(requestData).then(response => {
+        role.saveRole(requestData).then(response => {
           this.$message.success({
             type: 'success',
             message: '保存成功'
@@ -400,7 +402,7 @@ export default {
             'roleDesc': this.updateFormData.roleDesc,
             'id': this.updateFormData.id
           }
-        updateRole(requestData).then(response => {
+        role.updateRole(requestData).then(response => {
           this.$message.success({
             type: 'success',
             message: '更新成功'
@@ -417,11 +419,11 @@ export default {
       return match[0].name
     },
     grantResource(row) {
-      getResourceTree(row.platformId).then(response => {
+      resource.getResourceTree(row.platformId).then(response => {
         this.treeData = response.result
         this.grantRoleId = row.id
       })
-      getRoleResourceIds(row.id).then(response => {
+      role.getRoleResourceIds(row.id).then(response => {
         this.selectRes = response.result
         this.showTree = true
       })
@@ -431,7 +433,7 @@ export default {
         'resourceIds': this.$refs.tree.getCheckedKeys(),
         'roleId': this.grantRoleId
       }
-      grantRoleResources(request).then(response => {
+      role.grantRoleResources(request).then(response => {
         this.$message.success({
           type: 'success',
           message: '授权成功'

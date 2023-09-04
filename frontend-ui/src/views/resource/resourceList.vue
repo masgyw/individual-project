@@ -20,7 +20,7 @@
               v-for="(item, index) in platformIdOptions"
               :key="index"
               :label="item.name"
-              :value="item.id"
+              :value="item.code"
               :disabled="item.disabled"
             />
           </el-select>
@@ -37,28 +37,28 @@
       style="width: 100%"
     >
     <el-table-column label="资源名称" key="slot">
-        <template #default="scope">
+        <template v-slot="scope">
           {{ scope.row.name }}
         </template>
       </el-table-column>
       <el-table-column label="所属平台" prop="platformId" :formatter="formatId" />
       <el-table-column label="资源编码" key="slot">
-        <template #default="scope">
+        <template v-slot="scope">
           {{ scope.row.code }}
         </template>
       </el-table-column>
       <el-table-column label="url" key="slot">
-        <template #default="scope">
+        <template v-slot="scope">
           {{ scope.row.url }}
         </template>
       </el-table-column>
       <el-table-column label="路由" key="slot">
-        <template #default="scope">
+        <template v-slot="scope">
           {{ scope.row.router }}
         </template>
       </el-table-column>
       <el-table-column label="状态" key="slot">
-        <template #default="scope">
+        <template v-slot="scope">
           <el-button
             v-if="scope.row.validStatus == 'INVALID'"
             size="mini"
@@ -74,7 +74,7 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" key="slot">
-        <template #default="scope">
+        <template v-slot="scope">
           <el-button
             size="mini"
             type="primary"
@@ -100,8 +100,7 @@
 
 <script>
 
-import { resource } from '@/api'
-// import { findValidPlatforms } from '../../api/platform/platform'
+import { resource,platform } from '@/api'
 
 export default {
   data() {
@@ -120,8 +119,7 @@ export default {
     }
   },
   created() {
-    // this.init()
-    this.fetchData()
+    this.init()
   },
   methods: {
     init() {
@@ -130,7 +128,7 @@ export default {
           'code': '',
           'name': ''
         }
-      findValidPlatforms(requestData).then(response => {
+        platform.findValidPlatforms(requestData).then(response => {
         this.platformIdOptions = response.result
       })
       this.fetchData()

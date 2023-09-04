@@ -19,5 +19,8 @@ public abstract class BaseJwtUser implements Serializable {
 
     private Map<String, String> extInfo;
 
+    /**
+     * 权限列表
+     */
     private Collection<? extends GrantedAuthority> authorities;
 }
