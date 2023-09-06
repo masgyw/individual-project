@@ -36,6 +36,7 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 import javax.tools.Diagnostic.Kind;
@@ -84,7 +85,30 @@ public abstract class BaseCodeGenProcessor implements CodeGenProcessor {
                 variableElements.add(e);
             }
         }
+        // 父类属性
+        fillParentFields(typeElement.getSuperclass(), predicate, variableElements);
         return variableElements;
+    }
+
+    private void fillParentFields(TypeMirror parentType, Predicate<VariableElement> predicate,
+                                  Set<VariableElement> variableElements) {
+        if (parentType.getKind().equals(TypeKind.NONE)) {
+            return;
+        }
+        TypeElement parentElement = null;
+        if (parentType instanceof DeclaredType) {
+            parentElement = (TypeElement) ((DeclaredType) parentType).asElement();
+        }
+        if (Objects.isNull(parentElement)) {
+            return;
+        }
+        List<? extends Element> fieldTypes = parentElement.getEnclosedElements();
+        for (VariableElement e : ElementFilter.fieldsIn(fieldTypes)) {
+            if (predicate.test(e)) {
+                variableElements.add(e);
+            }
+        }
+        fillParentFields(parentElement.getSuperclass(), predicate, variableElements);
     }
 
     /**
