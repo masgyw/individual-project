@@ -38,6 +38,7 @@ public class JwtAuthenticationProvider extends BaseAuthenticationProvider implem
             } catch (ParseTokenException e) {
                 throw new CustomAuthenticationException(e.getCode(), e.getMsg());
             } catch (Exception e) {
+                log.error("认证异常:", e);
                 throw new CustomAuthenticationException(CodeEnum.SystemError.getCode(), CodeEnum.SystemError.getName());
             }
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

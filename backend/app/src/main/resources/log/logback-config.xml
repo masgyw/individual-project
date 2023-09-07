@@ -103,25 +103,39 @@
     </sift>
   </appender>
 
-  <!-- SQL 日志设置 -->
-  <logger name="cn.gyw.backend" level="info" additivity="false"></logger>
-  <logger name="org.hibernate" level="info" additivity="false"/>
+  <!--
+  additivity="false" 不传递给父类，若自己不处理，则不打印日志
+  -->
 
   <springProfile name="dev,test">
-    <logger name="org.springframework.web" level="debug" additivity="false"/>
+    <!-- SQL 日志设置 -->
+    <logger name="cn.gyw" level="info"/>
+    <logger name="org.hibernate" level="info"/>
+    <logger name="org.springframework.web" level="info"/>
     <!-- SQL 日志打印 -->
-    <logger name="org.hibernate.SQL" level="debug" additivity="false"/>
-    <logger name="org.hibernate.engine.QueryParameters" level="debug" additivity="false"/>
-    <logger name="org.hibernate.engine.query.HQLQueryPlan" level="debug" additivity="false"/>
-    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace" additivity="false"/>
-    <logger name="org.springframework.orm.jpa" level="debug" additivity="false"/>
-    <logger name="org.springframework.transaction" level="debug" additivity="false"/>
+    <logger name="org.hibernate.SQL" level="debug"/>
+    <logger name="org.hibernate.engine.QueryParameters" level="debug"/>
+    <logger name="org.hibernate.engine.query.HQLQueryPlan" level="debug"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace"/>
+    <logger name="org.springframework.orm.jpa" level="debug"/>
+    <logger name="org.springframework.transaction" level="debug"/>
     <root level="info">
       <appender-ref ref="CONSOLE"/>
     </root>
   </springProfile>
 
   <springProfile name="cloud">
+    <!-- SQL 日志设置 -->
+    <logger name="cn.gyw.backend" level="error" additivity="false">
+      <appender-ref ref="ERROR_FILE"/>
+    </logger>
+    <logger name="cn.gyw.backend" level="info" additivity="false">
+      <appender-ref ref="API_FILE"/>
+    </logger>
+    <logger name="org" level="info" additivity="false">
+      <appender-ref ref="FRAMEWORK_FILE"/>
+    </logger>
+
     <root level="info">
       <appender-ref ref="APP_FILE"/>
     </root>
