@@ -11,7 +11,6 @@ const config = {
             url: '/adminUser/v1/modifyPass',
             method: 'post',
         },
-
         {
             key: 'validUser',
             url: '/adminUser/v1/valid',
@@ -24,35 +23,27 @@ const config = {
         },
         {
             key: 'findCurrentUserAllRoles',
-
             url: '/adminUser/v1/getCurrentUserAllRolesByUserId',
             method: 'post',
         },
-
         {
             key: 'create',
-
-            url: '/adminUser/v1/create',
+            url: '/adminUser/v1/createAdminUser',
             method: 'post',
         },
-
         {
             key: 'findUserPlatforms',
-
             url: '/adminUser/v1/getCurrentUserPlatforms',
             method: 'post',
         },
-
         {
             key: 'findMenuTree',
-
             url: '/adminUser/v1/getCurrentUserResourceMenuTree',
             method: 'post',
         },
 
         {
             key: 'grantUserRoles',
-
             url: '/adminUser/v1/grantUserRoles',
             method: 'post',
         },
@@ -68,22 +59,18 @@ const config = {
             url: '/adminUser/v1/getUserPlatforms',
             method: 'post'
         },
-
         {
             key: 'getUserRoles',
             url: '/adminUser/v1/getUserRoles',
             method: 'post'
         },
-
         {
             key: 'getUserPlatforms',
             url: '/adminUser/v1/getUserPlatforms',
             method: 'post'
         },
-
         {
             key: 'grantUserPlatforms',
-
             url: '/adminUser/v1/grantUserPlatforms',
             method: 'post',
         }

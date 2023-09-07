@@ -138,6 +138,9 @@
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="addFormData.phone" placeholder="请输入手机号" clearable :style="{width: '100%'}" />
         </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="addFormData.password" placeholder="请输入密码" clearable :style="{width: '100%'}" />
+        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="addForm = false">取消</el-button>
@@ -186,7 +189,8 @@ export default {
       listLoading: true,
       addFormData: {
         username: '',
-        phone: ''
+        phone: '',
+        password: ''
       },
       rules: {
         username: [{
@@ -260,7 +264,8 @@ export default {
     handelConfirm() {
       this.$refs['addForm'].validate(valid => {
         if (!valid) return
-        adminUser.create(JSON.stringify(this.addFormData)).then(response => {
+        console.log(JSON.stringify(this.addFormData))
+        adminUser.create(this.addFormData).then(response => {
           this.$message.success({
             type: 'success',
             message: '保存成功'

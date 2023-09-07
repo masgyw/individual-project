@@ -143,6 +143,7 @@ export function generate (config) {
       if (items[i].pathParam) {
         pathVar = '/' + data
       }
+      console.log('==>', data)
       return ajax(items[i].method, (items[i].prefix || config.prefix || '') + items[i].url + pathVar, {
         data,
         ...(omit(items[i], ['key', 'url', 'method', 'prefix', 'params']) || {})
