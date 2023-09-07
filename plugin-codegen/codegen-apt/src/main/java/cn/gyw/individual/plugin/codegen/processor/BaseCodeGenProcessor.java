@@ -85,8 +85,12 @@ public abstract class BaseCodeGenProcessor implements CodeGenProcessor {
                 variableElements.add(e);
             }
         }
-        // 父类属性
-        fillParentFields(typeElement.getSuperclass(), predicate, variableElements);
+        return variableElements;
+    }
+
+    public Set<VariableElement> findParentFields(TypeMirror superclass, Predicate<VariableElement> predicate) {
+        Set<VariableElement> variableElements = new HashSet<>();
+        fillParentFields(superclass, predicate, variableElements);
         return variableElements;
     }
 
