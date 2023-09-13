@@ -324,19 +324,19 @@ public abstract class BaseCodeGenProcessor implements CodeGenProcessor {
             Path path = Paths.get(System.getProperty("user.dir") + File.separator + pathStr);
             File file = new File(path.toFile().getAbsolutePath());
             if (!file.exists()) {
-                System.err.println("源码文件不存在：" + file.getAbsolutePath());
+                System.err.printf("%s.java >> 生成目录不存在：%s\n", typeSpec.name, file.getAbsolutePath());
                 return;
             }
             String sourceFileName = path.toFile().getAbsolutePath() + File.separator + packagePath;
             File sourceFile = new File(sourceFileName);
             if (sourceFile.exists() && !overrideSource) {
-                System.out.println("源码文件存在不生成：" + sourceFile.getAbsolutePath());
+                System.out.printf("%s.java >> 文件已存在不生成。\n", typeSpec.name);
                 return;
             }
-            System.out.println("生成源码文件：" + sourceFileName);
             // 不存在 或 覆盖，先删除源文件后创建
             Files.deleteIfExists(Paths.get(sourceFileName));
             javaFile.writeTo(file);
+            System.out.printf("%s.java >> 源码文件生成", typeSpec.name);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
