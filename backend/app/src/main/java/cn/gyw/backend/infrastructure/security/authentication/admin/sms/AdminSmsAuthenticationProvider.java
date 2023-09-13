@@ -13,6 +13,7 @@ import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -39,7 +40,7 @@ public class AdminSmsAuthenticationProvider extends BaseAuthenticationProvider i
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         AdminSmsToken token = (AdminSmsToken) authentication;
-        if (ObjectUtils.isEmpty(token.getPhone()) || ObjectUtils.isEmpty(token.getVerifyCode())) {
+        if (StringUtils.isEmpty(token.getPhone()) || StringUtils.isEmpty(token.getVerifyCode())) {
             throw new BadCredentialsException(AuthErrorMsg.passwordIncorrect.getName());
         }
         Optional<AdminUser> adminUser = adminUserRepository.findByPhone(token.getPhone());

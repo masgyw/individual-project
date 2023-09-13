@@ -3,7 +3,6 @@ package cn.gyw.backend.infrastructure.security.authentication.admin.password;
 import cn.gyw.backend.infrastructure.config.SecurityProperties;
 import cn.gyw.backend.infrastructure.constants.AuthConstants;
 import cn.gyw.backend.infrastructure.security.LoginUserType;
-import cn.gyw.backend.infrastructure.security.SecurityConfig;
 import cn.gyw.backend.system.domain.admin.AdminUser;
 import cn.gyw.backend.system.domain.admin.repository.AdminUserRepository;
 import cn.gyw.individual.starters.security.base.BaseAuthenticationProvider;
@@ -41,7 +40,7 @@ public class AdminPasswordAuthenticationProvider extends BaseAuthenticationProvi
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         AdminUsernamePasswordToken token = (AdminUsernamePasswordToken) authentication;
-        if (ObjectUtils.isEmpty(token.getUsername()) || ObjectUtils.isEmpty(token.getPassword())) {
+        if (StringUtils.isEmpty(token.getUsername()) || StringUtils.isEmpty(token.getPassword())) {
             throw new BadCredentialsException(AuthErrorMsg.passwordIncorrect.getName());
         }
         Optional<AdminUser> adminUser = adminUserRepository.findByPhone(token.getUsername());
