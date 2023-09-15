@@ -50,6 +50,11 @@
       <!-- 一方库-->
       <dependency>
         <groupId>cn.gyw.individual</groupId>
+        <artifactId>commons</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.gyw.individual</groupId>
         <artifactId>codegen-apt</artifactId>
         <version>1.0.0</version>
       </dependency>

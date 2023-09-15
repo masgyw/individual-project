@@ -24,10 +24,6 @@
       <version>1.0.0</version>
       <exclusions>
         <exclusion>
-          <artifactId>commons-configuration2</artifactId>
-          <groupId>org.apache.commons</groupId>
-        </exclusion>
-        <exclusion>
           <artifactId>commons</artifactId>
           <groupId>cn.gyw.individual</groupId>
         </exclusion>
@@ -86,12 +82,6 @@
     <dependency>
       <groupId>com.github.xiaoymin</groupId>
       <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
-      <exclusions>
-        <exclusion>
-          <artifactId>swagger-core</artifactId>
-          <groupId>io.swagger.core.v3</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>mysql</groupId>
