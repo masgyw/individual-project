@@ -1,8 +1,8 @@
 package cn.gyw.backend.house.domain.house.service;
 
-import cn.gyw.backend.house.shedule.HouseInfoCsvReader;
 import cn.gyw.backend.house.config.HouseProperties;
 import cn.gyw.backend.house.enums.HouseTypeEnum;
+import cn.gyw.backend.house.shedule.HouseInfoCsvReader;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @date 2022/1/17 19:22
@@ -35,8 +36,8 @@ public class DataFileServiceImpl implements DataFileService {
     @Override
     public Set<String> getFileNameList(String startDate, String endDate) {
         String fileRoot = houseProperties.getStorageDir();
-        try {
-            return Files.walk(Paths.get(fileRoot), 2)
+        try (Stream<Path> pathStream = Files.walk(Paths.get(fileRoot), 2)) {
+            return pathStream
                     // 文件后缀过滤
                     .filter(path -> path.toString().endsWith(DATA_FILE_SUFFIX))
                     // houseType 过滤
@@ -60,9 +61,8 @@ public class DataFileServiceImpl implements DataFileService {
     @Override
     public List<File> findFile(String fileName, String crawlDate) {
         String fileRoot = houseProperties.getStorageDir();
-        try {
-            return Files.walk(Paths.get(fileRoot), 1)
-                    .peek(path -> log.info("访问文件path :{}", path.toString()))
+        try (Stream<Path> stream = Files.walk(Paths.get(fileRoot), 1)) {
+            return stream.peek(path -> log.info("访问文件path :{}", path.toString()))
                     // 文件名过滤
                     .filter(path -> {
                         if (StringUtils.isEmpty(fileName)) {
